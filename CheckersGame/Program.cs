@@ -18,10 +18,24 @@ class Program
         System.Console.WriteLine($"Player 1 Name: {player1.GetName()}, ID = {player1.GetID()}");
         System.Console.WriteLine($"Player 2 Name: {player2.GetName()}, ID = {player2.GetID()}");
 
-        //2. Initialize Board
+        //2. Initialize Board %% players init pieces placed
         gr.InitBoard();
 
-        //3. Have initial player pieces placed
+        //3. Get a player's pieces
+        var player1Pieces = gr.GetPlayerPieces(player1);
+        var player2Pieces = gr.GetPlayerPieces(player2);
+        // System.Console.WriteLine(player1Pieces.Count);
+        // System.Console.WriteLine(player2Pieces.Count);
+        foreach (var piece in player1Pieces)
+        {
+            Console.WriteLine(piece.GetPosition().GetRow() + ", " + piece.GetPosition().GetColumn());
+        }
+        foreach (var piece in player2Pieces)
+        {
+            Console.WriteLine(piece.GetPosition().GetRow() + ", " + piece.GetPosition().GetColumn());
+        }
 
+        //4. Get Available Move of a player's piece
+        // var pieceAvailMove = gr.GetAvailableMove();
     }
 }
