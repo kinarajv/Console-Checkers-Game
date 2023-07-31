@@ -91,7 +91,7 @@ class Program
         Piece player1Piece = gr.GetPlayerPiece(player1, piecePos);
 
         //4. Get Available Move of a player's piece
-        List<Position> pieceAvailMove = gr.GetAvailableMove(player1Piece);
+        List<Position> pieceAvailMove = gr.GetPossibleMove(player1Piece);
         foreach (var position in pieceAvailMove)
         {
             Console.WriteLine(position.GetRow() + "" + position.GetColumn());

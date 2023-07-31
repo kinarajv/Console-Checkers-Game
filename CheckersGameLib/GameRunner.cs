@@ -22,7 +22,7 @@ public class GameRunner
         List<Piece> pieces = new();
         List<Position> position = new();
         Random random = new Random();
-        int id = random.Next(2);
+        int id = random.Next(20000, 30000);
 
         if (!_playerPieces.ContainsKey(player))
         {
@@ -196,7 +196,7 @@ public class GameRunner
     }
 
     // Get Any available move for a player's piece
-    public List<Position> GetAvailableMove(Piece piece)
+    public List<Position> GetPossibleMove(Piece piece)
     {
         int row = piece.GetPosition().GetRow();
         int column = piece.GetPosition().GetColumn();
@@ -204,7 +204,7 @@ public class GameRunner
         // PieceColor red = PieceColor.Red;
         Rank basic = Rank.Basic;
         // Rank king = Rank.King;
-        List<Position> posList = new();
+        List<Position> posList = new List<Position>();
         if (piece.GetPieceColor() == black)
         {
             if (piece.GetRank() == basic)
