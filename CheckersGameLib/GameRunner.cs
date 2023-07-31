@@ -2,13 +2,11 @@ namespace CheckersGameLib;
 
 public class GameRunner
 {
-    private Dictionary<IPlayer, List<Piece>> _playerPieces = new();
+    private Dictionary<IPlayer, List<Piece>> _playerPieces = new Dictionary<IPlayer, List<Piece>>();
     private IBoard _board;
     // private PieceColor _pieceColor;
     // private Position _position;
     private GameStatus _gameStatus;
-    private string _name = "";
-    private int _id = 0;
 
     public GameRunner()
     {
@@ -24,27 +22,16 @@ public class GameRunner
         List<Piece> pieces = new();
         List<Position> position = new();
         Random random = new Random();
-        string playerName = "";
-        while (playerName.Equals("") || playerName.Equals(_name))
-        {
-            Console.WriteLine($"Enter Player {_playerPieces.Count + 1} Name: ");
-            playerName = Console.ReadLine();
-        }
-        _name = playerName;
-        player.SetName(_name);
-        int id = random.Next(20000, 29999);
-        while (id == _id)
-        {
-            id = random.Next(20000, 29999);
-        }
-        player.SetID(id);
-        _id = id;
+        int id = random.Next(2);
 
         if (!_playerPieces.ContainsKey(player))
         {
             int playerTotal = _playerPieces.Count;
+
+            // If there is no player added
             if (playerTotal == 0)
             {
+                player.SetID(id);
                 int i = 0;
                 for (int row = 0; row < 3; row++)
                 {
@@ -66,8 +53,24 @@ public class GameRunner
                     }
                 }
             }
+            // If there is a player
             else
             {
+                int isIDUnique;
+                do
+                {
+                    isIDUnique = 0;
+                    id = random.Next(2);
+                    player.SetID(id);
+                    foreach (var kvp in _playerPieces)
+                    {
+                        int playerID = kvp.Key.GetID();
+                        if (id == playerID)
+                        {
+                            isIDUnique++;
+                        }
+                    }
+                } while (isIDUnique > 0);
                 int i = 0;
                 for (int row = 5; row < 8; row++)
                 {
@@ -95,7 +98,7 @@ public class GameRunner
         return false;
     }
 
-    public void InitBoard()
+    public string InitBoard()
     {
         List<Position> posList = new();
         foreach (var pieceList in _playerPieces)
@@ -107,51 +110,180 @@ public class GameRunner
                 int row = pieces[i].GetPosition().GetRow();
                 int column = pieces[i].GetPosition().GetColumn();
                 posList.Add(pieces[i].GetPosition());
-                System.Console.WriteLine($"row: {row} & column: {column}");
+                // System.Console.WriteLine($"row: {row} & column: {column}");
             }
         }
         // System.Console.WriteLine(posList.Count);
 
         int posIndex = 0;
+        string board = "";
         for (int i = 0; i < _board.GetSize(); i++)
         {
             if (i == 0)
             {
-                System.Console.WriteLine("+---+---+---+---+---+---+---+---+");
+                board += "+---+---+---+---+---+---+---+---+\n";
             }
             for (int j = 0; j <= _board.GetSize(); j++)
             {
                 if (j == _board.GetSize())
                 {
-                    System.Console.Write($"|");
+                    board += "|";
                 }
                 else
                 {
                     if (posIndex == posList.Count)
                     {
-                        System.Console.Write($"|   ");
+                        board += "|   ";
                     }
                     else if (posList[posIndex].GetRow() == i && posList[posIndex].GetColumn() == j)
                     {
                         if (i <= 2)
                         {
-                            System.Console.Write($"| R ");
+                            board += "| B ";
                             posIndex++;
                         }
                         else if (i >= 5)
                         {
-                            System.Console.Write($"| B ");
+                            board += "| R ";
                             posIndex++;
                         }
                     }
                     else
                     {
-                        System.Console.Write($"|   ");
+                        board += "|   ";
                     }
                 }
             }
-            System.Console.WriteLine();
-            System.Console.WriteLine("+---+---+---+---+---+---+---+---+");
+            board += "\n+---+---+---+---+---+---+---+---+\n";
         }
+        return board;
+    }
+
+    // Get Player Pieces
+    public List<Piece> GetPlayerPieces(IPlayer player)
+    {
+        List<Piece> playerPieces = new();
+        bool piecesPerPlayer = _playerPieces.TryGetValue(player, out playerPieces);
+        if (piecesPerPlayer)
+        {
+            return playerPieces;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    // Get player's piece position
+    public Piece GetPlayerPiece(IPlayer player, Position position)
+    {
+        Piece piece = new Piece();
+        List<Piece> playerPieces = new();
+        int inputRow = position.GetRow();
+        int inputColumn = position.GetColumn();
+        bool piecesPerPlayer = _playerPieces.TryGetValue(player, out playerPieces);
+        foreach (var aPiece in playerPieces)
+        {
+            int outRow = aPiece.GetPosition().GetRow();
+            int outColumn = aPiece.GetPosition().GetColumn();
+            if (inputRow == outRow && inputColumn == outColumn)
+            {
+                return aPiece;
+            }
+        }
+
+        return piece;
+    }
+
+    // Get Any available move for a player's piece
+    public List<Position> GetAvailableMove(Piece piece)
+    {
+        int row = piece.GetPosition().GetRow();
+        int column = piece.GetPosition().GetColumn();
+        PieceColor black = PieceColor.Black;
+        // PieceColor red = PieceColor.Red;
+        Rank basic = Rank.Basic;
+        // Rank king = Rank.King;
+        List<Position> posList = new();
+        if (piece.GetPieceColor() == black)
+        {
+            if (piece.GetRank() == basic)
+            {
+                if (column == 0)
+                {
+                    posList.Add(new Position(row + 1, column + 1));
+                }
+                else if (column == 7)
+                {
+                    posList.Add(new Position(row + 1, column - 1));
+                }
+                else
+                {
+                    posList.Add(new Position(row + 1, column + 1));
+                    posList.Add(new Position(row + 1, column - 1));
+                }
+            }
+            else
+            {
+                if (column == 0)
+                {
+                    posList.Add(new Position(row + 1, column + 1));
+                    posList.Add(new Position(row - 1, column + 1));
+                }
+                else if (column == 7)
+                {
+                    posList.Add(new Position(row + 1, column - 1));
+                    posList.Add(new Position(row - 1, column - 1));
+                }
+                else
+                {
+                    posList.Add(new Position(row + 1, column + 1));
+                    posList.Add(new Position(row + 1, column - 1));
+                    posList.Add(new Position(row - 1, column + 1));
+                    posList.Add(new Position(row - 1, column - 1));
+                }
+            }
+        }
+        else
+        {
+            if (piece.GetRank() == basic)
+            {
+                if (column == 0)
+                {
+                    posList.Add(new Position(row - 1, column + 1));
+                }
+                else if (column == 7)
+                {
+                    posList.Add(new Position(row - 1, column - 1));
+                }
+                else
+                {
+                    posList.Add(new Position(row - 1, column + 1));
+                    posList.Add(new Position(row - 1, column - 1));
+                }
+            }
+            else
+            {
+                if (column == 0)
+                {
+                    posList.Add(new Position(row - 1, column + 1));
+                    posList.Add(new Position(row + 1, column + 1));
+                }
+                else if (column == 7)
+                {
+                    posList.Add(new Position(row - 1, column - 1));
+                    posList.Add(new Position(row + 1, column - 1));
+                }
+                else
+                {
+                    posList.Add(new Position(row - 1, column + 1));
+                    posList.Add(new Position(row - 1, column - 1));
+                    posList.Add(new Position(row + 1, column + 1));
+                    posList.Add(new Position(row + 1, column - 1));
+                }
+            }
+        }
+
+        return posList;
     }
 }

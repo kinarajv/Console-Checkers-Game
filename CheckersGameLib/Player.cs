@@ -2,19 +2,28 @@ namespace CheckersGameLib;
 
 public class Player : IPlayer
 {
-    private string name;
-    private int id;
+    private string _name;
+    private int _id;
+
+    public Player()
+    {
+    }
+
+    public Player(string name)
+    {
+        _name = name;
+    }
 
     public string GetName()
     {
-        return name;
+        return _name;
     }
 
     public bool SetName(string name)
     {
         if (name != null)
         {
-            this.name = name;
+            _name = name;
             return true;
         }
         else
@@ -25,14 +34,14 @@ public class Player : IPlayer
 
     public int GetID()
     {
-        return id;
+        return _id;
     }
 
     public bool SetID(int id)
     {
         if (id != 0)
         {
-            this.id = id;
+            _id = id;
             return true;
         }
         else
