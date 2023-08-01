@@ -198,19 +198,53 @@ public class GameRunner
     // Get Any available move for a player's piece
     public List<Position> GetPossibleMove(Piece piece)
     {
+        bool isOccupied = false;
+        bool isOwned = false;
+        int pieceCount = 0;
         int row = piece.GetPosition().GetRow();
         int column = piece.GetPosition().GetColumn();
         PieceColor black = PieceColor.Black;
-        // PieceColor red = PieceColor.Red;
         Rank basic = Rank.Basic;
-        // Rank king = Rank.King;
         List<Position> posList = new List<Position>();
-        if (piece.GetPieceColor() == black)
+        if (piece.GetRank().Equals(basic))
         {
-            if (piece.GetRank() == basic)
+            if (piece.GetPieceColor().Equals(black))
             {
                 if (column == 0)
                 {
+                    foreach (KeyValuePair<IPlayer, List<Piece>> kvp in _playerPieces)
+                    {
+                        var pieceList = kvp.Value.ToList();
+                        foreach (Piece pieces in pieceList)
+                        {
+                            int nextRow = pieces.GetPosition().GetRow();
+                            int nextCol = pieces.GetPosition().GetColumn();
+
+                            if (nextRow == row + 1 && nextCol == column + 1)
+                            {
+                                if (!pieces.GetPieceColor().Equals(black))
+                                {
+                                    isOccupied = true;
+                                }
+                            }
+
+                            if (isOccupied)
+                            {
+                                if (nextRow != row + 2 && nextCol != column + 2)
+                                {
+                                    pieceCount++;
+                                }
+                                else
+                                {
+                                    pieceCount = 0;
+                                }
+                            }
+                        }
+                        if (pieceCount != 0)
+                        {
+                            posList.Add(new Position(row + 2, column + 2));
+                        }
+                    }
                     posList.Add(new Position(row + 1, column + 1));
                 }
                 else if (column == 7)
