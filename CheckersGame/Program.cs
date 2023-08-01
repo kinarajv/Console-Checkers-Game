@@ -52,11 +52,14 @@ class Program
         // Console.WriteLine(player2Pieces.Count);
         foreach (var piece in player1Pieces)
         {
-            Console.WriteLine(piece.GetPosition().GetRow() + "" + piece.GetPosition().GetColumn());
+            Console.WriteLine(piece.GetPieceColor());
+            Console.WriteLine(piece.GetPosition().GetRow() + ", " + piece.GetPosition().GetColumn());
         }
+        // System.Console.WriteLine("============================================================");
         // foreach (var piece in player2Pieces)
         // {
-        //     Console.WriteLine(piece.GetPosition().GetRow() + "" + piece.GetPosition().GetColumn());
+        //     Console.WriteLine(piece.GetPieceColor());
+        //     Console.WriteLine(piece.GetPosition().GetRow() + ", " + piece.GetPosition().GetColumn());
         // }
 
         //4. Get a piece of a player
@@ -96,6 +99,11 @@ class Program
         {
             Console.WriteLine(position.GetRow() + "" + position.GetColumn());
         }
+
+        //5. Make move of selected piece
+        Position moveTo = new Position(row + 1, column + 1);
+        System.Console.WriteLine(gr.MakeMove(piecePos, moveTo));
+        System.Console.WriteLine(gr.InitBoard());
 
         Console.ReadLine();
     }

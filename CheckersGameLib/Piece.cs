@@ -13,15 +13,15 @@ public class Piece
 
     public bool SetRank(Rank rank)
     {
-        if (rank.Equals(_rank))
+        foreach (string ranks in Enum.GetNames(typeof(Rank)))
         {
-            _rank = rank;
-            return true;
+            if (Enum.GetName(rank).Equals(ranks))
+            {
+                _rank = rank;
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
     public Position GetPosition()
     {
@@ -48,14 +48,14 @@ public class Piece
 
     public bool SetPieceColor(PieceColor pieceColor)
     {
-        if (pieceColor.Equals(this._pieceColor))
+        foreach (string color in Enum.GetNames(typeof(PieceColor)))
         {
-            this._pieceColor = pieceColor;
-            return true;
+            if (Enum.GetName(pieceColor).Equals(color))
+            {
+                _pieceColor = pieceColor;
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 }

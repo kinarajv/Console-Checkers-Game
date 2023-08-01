@@ -21,6 +21,8 @@ public class GameRunner
     {
         List<Piece> pieces = new();
         List<Position> position = new();
+        PieceColor pc = new PieceColor();
+        Rank rank = new Rank();
         Random random = new Random();
         int id = random.Next(20000, 30000);
 
@@ -42,11 +44,12 @@ public class GameRunner
                         {
                             pieces.Add(new Piece());
                             position.Add(new Position());
+                            pieces[i].SetPieceColor((PieceColor)playerTotal);
                             pieces[i].SetRank(Rank.Basic);
                             position[i].SetRow(row);
                             position[i].SetColumn(column);
                             pieces[i].SetPosition(position[i]);
-                            pieces[i].SetPieceColor((PieceColor)playerTotal);
+                            // System.Console.WriteLine((PieceColor)playerTotal);
                             // System.Console.WriteLine("x: " + pieces[i].GetPosition().GetRow() + ", y: " + pieces[i].GetPosition().GetColumn());
                             i++;
                         }
@@ -60,7 +63,6 @@ public class GameRunner
                 do
                 {
                     isIDUnique = 0;
-                    id = random.Next(2);
                     player.SetID(id);
                     foreach (var kvp in _playerPieces)
                     {
@@ -70,6 +72,7 @@ public class GameRunner
                             isIDUnique++;
                         }
                     }
+                    id = random.Next(20000, 30000);
                 } while (isIDUnique > 0);
                 int i = 0;
                 for (int row = 5; row < 8; row++)
@@ -81,17 +84,19 @@ public class GameRunner
                         {
                             pieces.Add(new Piece());
                             position.Add(new Position());
+                            pieces[i].SetPieceColor((PieceColor)playerTotal);
                             pieces[i].SetRank(Rank.Basic);
                             position[i].SetRow(row);
                             position[i].SetColumn(column);
                             pieces[i].SetPosition(position[i]);
-                            pieces[i].SetPieceColor((PieceColor)playerTotal);
+                            // System.Console.WriteLine(pieces[i].SetPieceColor((PieceColor)playerTotal));
                             // System.Console.WriteLine("x: " + pieces[i].GetPosition().GetRow() + ", y: " + pieces[i].GetPosition().GetColumn());
                             i++;
                         }
                     }
                 }
             }
+            // System.Console.WriteLine((PieceColor)playerTotal);
             _playerPieces.Add(player, pieces);
             return true;
         }
@@ -100,23 +105,28 @@ public class GameRunner
 
     public string InitBoard()
     {
-        List<Position> posList = new();
+        List<Piece> piecesList = new();
+        Rank basic = Rank.Basic;
+        PieceColor black = PieceColor.Black;
+
         foreach (var pieceList in _playerPieces)
         {
-            System.Console.WriteLine(pieceList.Key.GetName());
+            // System.Console.WriteLine(pieceList.Key.GetName());
             var pieces = pieceList.Value.ToList();
             for (int i = 0; i < pieces.Count; i++)
             {
-                int row = pieces[i].GetPosition().GetRow();
-                int column = pieces[i].GetPosition().GetColumn();
-                posList.Add(pieces[i].GetPosition());
+                // int row = pieces[i].GetPosition().GetRow();
+                // int column = pieces[i].GetPosition().GetColumn();
+                piecesList.Add(pieces[i]);
                 // System.Console.WriteLine($"row: {row} & column: {column}");
+                // System.Console.WriteLine(pieces[i].GetPieceColor());
             }
         }
         // System.Console.WriteLine(posList.Count);
 
         int posIndex = 0;
         string board = "";
+
         for (int i = 0; i < _board.GetSize(); i++)
         {
             if (i == 0)
@@ -125,28 +135,25 @@ public class GameRunner
             }
             for (int j = 0; j <= _board.GetSize(); j++)
             {
+
                 if (j == _board.GetSize())
                 {
                     board += "|";
                 }
                 else
                 {
-                    if (posIndex == posList.Count)
+                    if (posIndex == piecesList.Count)
                     {
                         board += "|   ";
                     }
-                    else if (posList[posIndex].GetRow() == i && posList[posIndex].GetColumn() == j)
+                    else if (piecesList[posIndex].GetPosition().GetRow() == i && piecesList[posIndex].GetPosition().GetColumn() == j)
                     {
-                        if (i <= 2)
-                        {
-                            board += "| B ";
-                            posIndex++;
-                        }
-                        else if (i >= 5)
-                        {
-                            board += "| R ";
-                            posIndex++;
-                        }
+                        Rank pieceRank = piecesList[posIndex].GetRank();
+                        PieceColor pieceColor = piecesList[posIndex].GetPieceColor();
+                        char isBasic = pieceRank.Equals(basic) && pieceColor.Equals(black) ? 'b' : 'r';
+
+                        board += $"| {isBasic} ";
+                        posIndex++;
                     }
                     else
                     {
@@ -162,8 +169,8 @@ public class GameRunner
     // Get Player Pieces
     public List<Piece> GetPlayerPieces(IPlayer player)
     {
-        List<Piece> playerPieces = new();
-        bool piecesPerPlayer = _playerPieces.TryGetValue(player, out playerPieces);
+        // List<Piece> playerPieces = new();
+        bool piecesPerPlayer = _playerPieces.TryGetValue(player, out List<Piece> playerPieces);
         if (piecesPerPlayer)
         {
             return playerPieces;
@@ -198,8 +205,8 @@ public class GameRunner
     // Get Any available move for a player's piece
     public List<Position> GetPossibleMove(Piece piece)
     {
-        bool isOccupied = false;
-        bool isOwned = false;
+        // bool isOccupied = false;
+        // bool isOwned = false;
         int pieceCount = 0;
         int row = piece.GetPosition().GetRow();
         int column = piece.GetPosition().GetColumn();
@@ -212,40 +219,11 @@ public class GameRunner
             {
                 if (column == 0)
                 {
-                    foreach (KeyValuePair<IPlayer, List<Piece>> kvp in _playerPieces)
-                    {
-                        var pieceList = kvp.Value.ToList();
-                        foreach (Piece pieces in pieceList)
-                        {
-                            int nextRow = pieces.GetPosition().GetRow();
-                            int nextCol = pieces.GetPosition().GetColumn();
-
-                            if (nextRow == row + 1 && nextCol == column + 1)
-                            {
-                                if (!pieces.GetPieceColor().Equals(black))
-                                {
-                                    isOccupied = true;
-                                }
-                            }
-
-                            if (isOccupied)
-                            {
-                                if (nextRow != row + 2 && nextCol != column + 2)
-                                {
-                                    pieceCount++;
-                                }
-                                else
-                                {
-                                    pieceCount = 0;
-                                }
-                            }
-                        }
-                        if (pieceCount != 0)
-                        {
-                            posList.Add(new Position(row + 2, column + 2));
-                        }
-                    }
                     posList.Add(new Position(row + 1, column + 1));
+                    foreach (var kvp in _playerPieces)
+                    {
+                        var playersPieces = kvp.Value.ToList();
+                    }
                 }
                 else if (column == 7)
                 {
@@ -319,5 +297,32 @@ public class GameRunner
         }
 
         return posList;
+    }
+
+    public bool MakeMove(Position origin, Position destination)
+    {
+        bool isValid = false;
+        int originRow = origin.GetRow();
+        int originCol = origin.GetColumn();
+
+        foreach (var kvp in _playerPieces)
+        {
+            var pieceList = kvp.Value.ToList();
+            foreach (var piece in pieceList)
+            {
+                // System.Console.WriteLine(pieceList.GetPosition() == origin);
+                int ownedRow = piece.GetPosition().GetRow();
+                int ownedCol = piece.GetPosition().GetColumn();
+                if (originRow == ownedRow && originCol == ownedCol)
+                {
+                    piece.SetPosition(destination);
+                    isValid = true;
+                }
+            }
+        }
+        System.Console.WriteLine($"Origin: {origin.GetRow()}, {origin.GetColumn()}");
+        System.Console.WriteLine($"Destination: {destination.GetRow()}, {destination.GetColumn()}");
+
+        return isValid;
     }
 }
