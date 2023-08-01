@@ -94,16 +94,16 @@ class Program
         Piece player1Piece = gr.GetPlayerPiece(player1, piecePos);
 
         //4. Get Available Move of a player's piece
-        List<Position> pieceAvailMove = gr.GetPossibleMove(player1Piece);
-        foreach (var position in pieceAvailMove)
-        {
-            Console.WriteLine(position.GetRow() + "" + position.GetColumn());
-        }
+        // List<Position> pieceAvailMove = gr.GetPossibleMove(player1Piece);
+        // foreach (var position in pieceAvailMove)
+        // {
+        //     Console.WriteLine(position.GetRow() + "" + position.GetColumn());
+        // }
 
         //5. Make move of selected piece
-        Position moveTo = new Position(row + 1, column + 1);
-        System.Console.WriteLine(gr.MakeMove(piecePos, moveTo));
-        System.Console.WriteLine(gr.InitBoard());
+        Position moveTo = new Position(3, 2);
+        gr.MakeMove(piecePos, moveTo);
+        // System.Console.WriteLine(gr.MakeMove(piecePos, moveTo));
 
         Console.ReadLine();
     }

@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace CheckersGameLib;
 
 public class GameRunner
@@ -21,8 +23,6 @@ public class GameRunner
     {
         List<Piece> pieces = new();
         List<Position> position = new();
-        PieceColor pc = new PieceColor();
-        Rank rank = new Rank();
         Random random = new Random();
         int id = random.Next(20000, 30000);
 
@@ -115,6 +115,7 @@ public class GameRunner
             var pieces = pieceList.Value.ToList();
             for (int i = 0; i < pieces.Count; i++)
             {
+                // System.Console.WriteLine(pieces.Count);
                 // int row = pieces[i].GetPosition().GetRow();
                 // int column = pieces[i].GetPosition().GetColumn();
                 piecesList.Add(pieces[i]);
@@ -125,45 +126,68 @@ public class GameRunner
         // System.Console.WriteLine(posList.Count);
 
         int posIndex = 0;
-        string board = "";
+        // string board = "";
+        StringBuilder boardSb = new StringBuilder();
 
+        boardSb.Append("+---+---+---+---+---+---+---+---+\n");
         for (int i = 0; i < _board.GetSize(); i++)
         {
-            if (i == 0)
+            for (int j = 0; j < _board.GetSize(); j++)
             {
-                board += "+---+---+---+---+---+---+---+---+\n";
-            }
-            for (int j = 0; j <= _board.GetSize(); j++)
-            {
-
-                if (j == _board.GetSize())
+                if (posIndex == piecesList.Count)
                 {
-                    board += "|";
+                    boardSb.Append("|   ");
                 }
-                else
-                {
-                    if (posIndex == piecesList.Count)
+                else if (piecesList[posIndex].GetPosition().GetRow() == i && piecesList[posIndex].GetPosition().GetColumn() == j)
+                { // piecesList[posIndex].GetPosition().GetRow() == i && piecesList[posIndex].GetPosition().GetColumn() == j
+                    Rank pieceRank = piecesList[posIndex].GetRank();
+                    PieceColor pieceColor = piecesList[posIndex].GetPieceColor();
+                    char pieceChar;
+                    if (pieceRank.Equals(basic) && pieceColor.Equals(black))
                     {
-                        board += "|   ";
+                        pieceChar = 'b';
                     }
-                    else if (piecesList[posIndex].GetPosition().GetRow() == i && piecesList[posIndex].GetPosition().GetColumn() == j)
+                    else if (pieceRank.Equals(basic) && !pieceColor.Equals(black))
                     {
-                        Rank pieceRank = piecesList[posIndex].GetRank();
-                        PieceColor pieceColor = piecesList[posIndex].GetPieceColor();
-                        char isBasic = pieceRank.Equals(basic) && pieceColor.Equals(black) ? 'b' : 'r';
-
-                        board += $"| {isBasic} ";
-                        posIndex++;
+                        pieceChar = 'r';
+                    }
+                    else if (!pieceRank.Equals(basic) && pieceColor.Equals(black))
+                    {
+                        pieceChar = 'B';
                     }
                     else
                     {
-                        board += "|   ";
+                        pieceChar = 'R';
                     }
+                    // char isBasic = pieceRank.Equals(basic) && pieceColor.Equals(black) ? 'b' : 'r';
+
+                    boardSb.Append($"| {pieceChar} ");
+                    posIndex++;
                 }
+                else
+                {
+                    boardSb.Append("|   ");
+                }
+
             }
-            board += "\n+---+---+---+---+---+---+---+---+\n";
+            boardSb.Append("|");
+            boardSb.Append("\n+---+---+---+---+---+---+---+---+\n");
         }
-        return board;
+        return boardSb.ToString();
+    }
+
+    //Check Piece
+    public Piece CheckPiece(Piece piece)
+    {
+        foreach (var kvp in _playerPieces)
+        {
+            var pieceList = kvp.Value.ToList();
+            if (pieceList.Contains(piece))
+            {
+                return piece;
+            }
+        }
+        return null;
     }
 
     // Get Player Pieces
@@ -207,7 +231,11 @@ public class GameRunner
     {
         // bool isOccupied = false;
         // bool isOwned = false;
-        int pieceCount = 0;
+        // bool isMove;
+        int basicMove;
+        int singleMove;
+        int doubleMove;
+        int[] nextPos = new int[2];
         int row = piece.GetPosition().GetRow();
         int column = piece.GetPosition().GetColumn();
         PieceColor black = PieceColor.Black;
@@ -219,10 +247,48 @@ public class GameRunner
             {
                 if (column == 0)
                 {
-                    posList.Add(new Position(row + 1, column + 1));
+                    basicMove = 0;
+                    singleMove = 0;
+                    doubleMove = 0;
+                    // posList.Add(new Position(row + 1, column + 1));
                     foreach (var kvp in _playerPieces)
                     {
                         var playersPieces = kvp.Value.ToList();
+                        foreach (var pieces in playersPieces)
+                        {
+                            int occuRow = pieces.GetPosition().GetRow();
+                            int occuCol = pieces.GetPosition().GetColumn();
+                            if (row + 1 == occuRow && column + 1 == occuCol)
+                            {
+                                if (!pieces.GetPieceColor().Equals(black))
+                                {
+                                    singleMove++;
+                                }
+                                // else
+                                // {
+                                //     isMove = true;
+                                // }
+                            }
+                            else if (row + 1 == occuRow + 1 && column + 1 == occuCol + 1)
+                            {
+                                basicMove++;
+                            }
+
+                            if (row + 2 == occuRow + 2 && column + 2 == occuCol + 2)
+                            {
+                                singleMove++;
+                            }
+                        }
+                    }
+
+                    if (singleMove == 2)
+                    {
+                        posList.Add(new Position(row + 2, column + 2));
+                    }
+
+                    if (basicMove == 1)
+                    {
+                        posList.Add(new Position(row + 1, column + 1));
                     }
                 }
                 else if (column == 7)
@@ -317,11 +383,18 @@ public class GameRunner
                 {
                     piece.SetPosition(destination);
                     isValid = true;
+                    break;
                 }
+            }
+
+            if (isValid)
+            {
+                break;
             }
         }
         System.Console.WriteLine($"Origin: {origin.GetRow()}, {origin.GetColumn()}");
         System.Console.WriteLine($"Destination: {destination.GetRow()}, {destination.GetColumn()}");
+        System.Console.WriteLine(InitBoard());
 
         return isValid;
     }
