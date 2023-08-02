@@ -7,6 +7,8 @@ public class Position
 
     public Position()
     {
+        _row = 0;
+        _column = 0;
     }
 
     public Position(int row, int column)

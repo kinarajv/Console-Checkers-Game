@@ -19,6 +19,11 @@ public class GameRunner
         _board = board;
     }
 
+    public int GetBoardBoundary()
+    {
+        return _board.GetSize();
+    }
+
     public bool AddPlayer(IPlayer player)
     {
         List<Piece> pieces = new();
@@ -103,88 +108,18 @@ public class GameRunner
         return false;
     }
 
-    public string InitBoard()
-    {
-        List<Piece> piecesList = new();
-        Rank basic = Rank.Basic;
-        PieceColor black = PieceColor.Black;
-
-        foreach (var pieceList in _playerPieces)
-        {
-            // System.Console.WriteLine(pieceList.Key.GetName());
-            var pieces = pieceList.Value.ToList();
-            for (int i = 0; i < pieces.Count; i++)
-            {
-                // System.Console.WriteLine(pieces.Count);
-                // int row = pieces[i].GetPosition().GetRow();
-                // int column = pieces[i].GetPosition().GetColumn();
-                piecesList.Add(pieces[i]);
-                // System.Console.WriteLine($"row: {row} & column: {column}");
-                // System.Console.WriteLine(pieces[i].GetPieceColor());
-            }
-        }
-        // System.Console.WriteLine(posList.Count);
-
-        int posIndex = 0;
-        // string board = "";
-        StringBuilder boardSb = new StringBuilder();
-
-        boardSb.Append("+---+---+---+---+---+---+---+---+\n");
-        for (int i = 0; i < _board.GetSize(); i++)
-        {
-            for (int j = 0; j < _board.GetSize(); j++)
-            {
-                if (posIndex == piecesList.Count)
-                {
-                    boardSb.Append("|   ");
-                }
-                else if (piecesList[posIndex].GetPosition().GetRow() == i && piecesList[posIndex].GetPosition().GetColumn() == j)
-                { // piecesList[posIndex].GetPosition().GetRow() == i && piecesList[posIndex].GetPosition().GetColumn() == j
-                    Rank pieceRank = piecesList[posIndex].GetRank();
-                    PieceColor pieceColor = piecesList[posIndex].GetPieceColor();
-                    char pieceChar;
-                    if (pieceRank.Equals(basic) && pieceColor.Equals(black))
-                    {
-                        pieceChar = 'b';
-                    }
-                    else if (pieceRank.Equals(basic) && !pieceColor.Equals(black))
-                    {
-                        pieceChar = 'r';
-                    }
-                    else if (!pieceRank.Equals(basic) && pieceColor.Equals(black))
-                    {
-                        pieceChar = 'B';
-                    }
-                    else
-                    {
-                        pieceChar = 'R';
-                    }
-                    // char isBasic = pieceRank.Equals(basic) && pieceColor.Equals(black) ? 'b' : 'r';
-
-                    boardSb.Append($"| {pieceChar} ");
-                    posIndex++;
-                }
-                else
-                {
-                    boardSb.Append("|   ");
-                }
-
-            }
-            boardSb.Append("|");
-            boardSb.Append("\n+---+---+---+---+---+---+---+---+\n");
-        }
-        return boardSb.ToString();
-    }
-
     //Check Piece
-    public Piece CheckPiece(Piece piece)
+    public Piece CheckPiece(int row, int col)
     {
         foreach (var kvp in _playerPieces)
         {
             var pieceList = kvp.Value.ToList();
-            if (pieceList.Contains(piece))
+            foreach (Piece piece in pieceList)
             {
-                return piece;
+                if (piece.GetPosition().GetRow() == row && piece.GetPosition().GetColumn() == col)
+                {
+                    return piece;
+                }
             }
         }
         return null;
@@ -232,9 +167,9 @@ public class GameRunner
         // bool isOccupied = false;
         // bool isOwned = false;
         // bool isMove;
-        int basicMove;
-        int singleMove;
-        int doubleMove;
+        // int basicMove;
+        // int singleMove;
+        // int doubleMove;
         int[] nextPos = new int[2];
         int row = piece.GetPosition().GetRow();
         int column = piece.GetPosition().GetColumn();
@@ -247,49 +182,24 @@ public class GameRunner
             {
                 if (column == 0)
                 {
-                    basicMove = 0;
-                    singleMove = 0;
-                    doubleMove = 0;
-                    // posList.Add(new Position(row + 1, column + 1));
-                    foreach (var kvp in _playerPieces)
+                    Piece pSingle = CheckPiece(row + 1, column + 1);
+                    if (pSingle != null)
                     {
-                        var playersPieces = kvp.Value.ToList();
-                        foreach (var pieces in playersPieces)
+                        if (!pSingle.GetPieceColor().Equals(black))
                         {
-                            int occuRow = pieces.GetPosition().GetRow();
-                            int occuCol = pieces.GetPosition().GetColumn();
-                            if (row + 1 == occuRow && column + 1 == occuCol)
+                            Piece pEat = CheckPiece(row + 2, column + 2);
+                            if (pEat == null)
                             {
-                                if (!pieces.GetPieceColor().Equals(black))
-                                {
-                                    singleMove++;
-                                }
-                                // else
-                                // {
-                                //     isMove = true;
-                                // }
-                            }
-                            else if (row + 1 == occuRow + 1 && column + 1 == occuCol + 1)
-                            {
-                                basicMove++;
-                            }
-
-                            if (row + 2 == occuRow + 2 && column + 2 == occuCol + 2)
-                            {
-                                singleMove++;
+                                pSingle.SetIsEaten(true);
+                                posList.Add(new Position(row + 2, column + 2));
                             }
                         }
                     }
-
-                    if (singleMove == 2)
-                    {
-                        posList.Add(new Position(row + 2, column + 2));
-                    }
-
-                    if (basicMove == 1)
+                    else
                     {
                         posList.Add(new Position(row + 1, column + 1));
                     }
+                    // posList.Add(new Position(row + 1, column + 1));
                 }
                 else if (column == 7)
                 {
@@ -394,7 +304,6 @@ public class GameRunner
         }
         System.Console.WriteLine($"Origin: {origin.GetRow()}, {origin.GetColumn()}");
         System.Console.WriteLine($"Destination: {destination.GetRow()}, {destination.GetColumn()}");
-        System.Console.WriteLine(InitBoard());
 
         return isValid;
     }

@@ -2,9 +2,25 @@ namespace CheckersGameLib;
 
 public class Piece
 {
+    private bool _isEaten = false;
     private Rank _rank;
     private Position _position;
     private PieceColor _pieceColor;
+
+    public bool GetIsEaten()
+    {
+        return _isEaten;
+    }
+
+    public bool SetIsEaten(bool isEaten)
+    {
+        if (_isEaten != isEaten)
+        {
+            _isEaten = isEaten;
+            return true;
+        }
+        return false;
+    }
 
     public Rank GetRank()
     {
