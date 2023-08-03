@@ -14,12 +14,8 @@ public class Piece
 
     public bool SetIsEaten(bool isEaten)
     {
-        if (_isEaten != isEaten)
-        {
-            _isEaten = isEaten;
-            return true;
-        }
-        return false;
+        _isEaten = isEaten;
+        return _isEaten;
     }
 
     public Rank GetRank()

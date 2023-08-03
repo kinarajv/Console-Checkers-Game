@@ -2,20 +2,22 @@ using System.Text;
 
 namespace CheckersGameLib;
 
-public class GameRunner
+public class GameRunnerTest
 {
-    private Dictionary<IPlayer, List<Piece>> _playerPieces = new Dictionary<IPlayer, List<Piece>>();
+    private Dictionary<IPlayer, List<Piece>> _playerPieces;
     private IBoard _board;
     // private PieceColor _pieceColor;
     // private Position _position;
     private GameStatus _gameStatus;
 
-    public GameRunner()
+    public GameRunnerTest()
     {
+        _playerPieces = new Dictionary<IPlayer, List<Piece>>();
     }
 
-    public GameRunner(IBoard board)
+    public GameRunnerTest(IBoard board)
     {
+        _playerPieces = new Dictionary<IPlayer, List<Piece>>();
         _board = board;
     }
 
@@ -175,80 +177,105 @@ public class GameRunner
         {
             if (piece.GetPieceColor().Equals(black))
             {
-                if (column == 0)
+                Piece pSingleP1P1 = CheckPiece(row + 1, column + 1);
+                Piece pSingleP1M1 = CheckPiece(row + 1, column - 1);
+                if (pSingleP1P1 != null) // Klo di serong + 11 ada
                 {
-                    Piece pSingle = CheckPiece(row + 1, column + 1);
-                    if (pSingle != null) // Klo di serong + 11 ada
+                    if (!pSingleP1P1.GetPieceColor().Equals(black)) // Klo di serong + 11 merah
                     {
-                        if (!pSingle.GetPieceColor().Equals(black)) // Klo di serong + 11 merah
+                        Piece pEatP2P2 = CheckPiece(row + 2, column + 2);
+                        if (pEatP2P2 == null && row < GetBoardBoundary() && column < GetBoardBoundary()) // Klo di serong + 22 merah
                         {
-                            Piece pEat = CheckPiece(row + 2, column + 2);
-                            if (pEat == null && column < GetBoardBoundary()) // Klo di serong + 22 merah
+                            pSingleP1P1.SetIsEaten(true);
+                            posList.Add(new Position(row + 2, column + 2));
+                            Piece pDoubleP3P3 = CheckPiece(row + 3, column + 3);
+                            if (pDoubleP3P3 != null) // Klo di serong + 33 ada
                             {
-                                pSingle.SetIsEaten(true);
-                                posList.Add(new Position(row + 2, column + 2));
-                                Piece pDouble6 = CheckPiece(row + 3, column + 3);
-                                if (pDouble6 != null) // Klo di serong + 33 ada
+                                if (!pDoubleP3P3.GetPieceColor().Equals(black)) // Klo di serong + 33 merah
                                 {
-                                    if (!pDouble6.GetPieceColor().Equals(black)) // Klo di serong + 33 merah
+                                    Piece pEatP4P4 = CheckPiece(row + 4, column + 4);
+                                    if (pEatP4P4 == null && row < GetBoardBoundary() && column < GetBoardBoundary()) // Klo di serong + 44 kosong
                                     {
-                                        Piece pEat28 = CheckPiece(row + 4, column + 4);
-                                        if (pEat28 == null && column < GetBoardBoundary()) // Klo di serong + 44 kosong
-                                        {
-                                            pDouble6.SetIsEaten(true);
-                                            posList.Add(new Position(row + 4, column + 4));
-                                        }
-
+                                        pDoubleP3P3.SetIsEaten(true);
+                                        posList.Add(new Position(row + 4, column + 4));
                                     }
+
                                 }
-                                Piece pDouble4 = CheckPiece(row + 3, column + 1);
-                                if (pDouble4 != null) // Klo di serong + 31 ada
+                            }
+
+                            Piece pDoubleP3P1 = CheckPiece(row + 3, column + 1);
+                            if (pDoubleP3P1 != null) // Klo di serong + 31 ada
+                            {
+                                if (!pDoubleP3P1.GetPieceColor().Equals(black)) // Klo di serong + 31 merah
                                 {
-                                    if (!pDouble4.GetPieceColor().Equals(black)) // Klo di serong + 31 merah
+                                    Piece pEatP4P0 = CheckPiece(row + 4, column + 0);
+                                    if (pEatP4P0 == null && row < GetBoardBoundary() && column < GetBoardBoundary()) // Klo di serong + 40 kosong
                                     {
-                                        Piece pEat24 = CheckPiece(row + 4, column + 0);
-                                        if (pEat24 == null && column < GetBoardBoundary()) // Klo di serong + 40 kosong
+                                        pDoubleP3P1.SetIsEaten(true);
+                                        if (!posList.Contains(new Position(row + 4, column + 0)))
                                         {
-                                            pDouble4.SetIsEaten(true);
                                             posList.Add(new Position(row + 4, column + 0));
                                         }
-
                                     }
+
                                 }
                             }
                         }
                     }
-                    else
-                    {
-                        posList.Add(new Position(row + 1, column + 1));
-                    }
-                    // posList.Add(new Position(row + 1, column + 1));
                 }
-                else if (column == 7)
+                else if (pSingleP1M1 != null) // Klo di serong +1-1 ada
                 {
-                    Piece pSingle = CheckPiece(row + 1, column - 1);
-                    if (pSingle != null)
+                    if (!pSingleP1M1.GetPieceColor().Equals(black)) // Klo di serong +1-1 merah
                     {
-                        if (!pSingle.GetPieceColor().Equals(black))
+                        Piece pEatP2M2 = CheckPiece(row + 2, column - 2);
+                        if (pEatP2M2 == null && row < GetBoardBoundary() && column >= 0) // Klo di serong + 22 merah
                         {
-                            Piece pEat = CheckPiece(row + 2, column - 2);
-                            if (pEat == null)
+                            pSingleP1M1.SetIsEaten(true);
+                            posList.Add(new Position(row + 2, column - 2));
+                            Piece pDoubleP3M3 = CheckPiece(row + 3, column - 3);
+                            if (pDoubleP3M3 != null) // Klo di serong + 33 ada
                             {
-                                pSingle.SetIsEaten(true);
-                                posList.Add(new Position(row + 2, column - 2));
+                                if (!pDoubleP3M3.GetPieceColor().Equals(black)) // Klo di serong + 33 merah
+                                {
+                                    Piece pEatP4P4 = CheckPiece(row + 4, column + 4);
+                                    if (pEatP4P4 == null && row < GetBoardBoundary() && column < GetBoardBoundary()) // Klo di serong + 44 kosong
+                                    {
+                                        pDoubleP3M3.SetIsEaten(true);
+                                        posList.Add(new Position(row + 4, column + 4));
+                                    }
+
+                                }
+                            }
+
+                            Piece pDoubleP3M1 = CheckPiece(row + 3, column - 1);
+                            if (pDoubleP3M1 != null) // Klo di serong + 31 ada
+                            {
+                                if (!pDoubleP3M1.GetPieceColor().Equals(black)) // Klo di serong + 31 merah
+                                {
+                                    Piece pEatP4P0 = CheckPiece(row + 4, column + 0);
+                                    if (pEatP4P0 == null && row < GetBoardBoundary() && column < GetBoardBoundary()) // Klo di serong + 40 kosong
+                                    {
+                                        pDoubleP3M1.SetIsEaten(true);
+                                        if (!posList.Contains(new Position(row + 4, column + 0)))
+                                        {
+                                            posList.Add(new Position(row + 4, column + 0));
+                                        }
+                                    }
+
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        posList.Add(new Position(row + 1, column - 1));
                     }
                 }
                 else
                 {
-                    posList.Add(new Position(row + 1, column + 1));
+                    if (column + 1 < GetBoardBoundary())
+                    {
+                        posList.Add(new Position(row + 1, column + 1));
+                    }
                     posList.Add(new Position(row + 1, column - 1));
                 }
+                // posList.Add(new Position(row + 1, column + 1));
             }
             else
             {
@@ -273,7 +300,7 @@ public class GameRunner
         }
         else
         {
-            if (piece.GetRank() == basic)
+            if (piece.GetPieceColor().Equals(black))
             {
                 if (column == 0)
                 {
@@ -341,9 +368,6 @@ public class GameRunner
                 break;
             }
         }
-        System.Console.WriteLine($"Origin: {origin.GetRow()}, {origin.GetColumn()}");
-        System.Console.WriteLine($"Destination: {destination.GetRow()}, {destination.GetColumn()}");
-
         return isValid;
     }
 }

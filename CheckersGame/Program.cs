@@ -5,13 +5,13 @@ class Program
     static void Main()
     {
         // 1. Add Players
-        Board checkers = new Board();
-        bool checkerSize = checkers.SetSize(8);
-        GameRunner checkersGame = new GameRunner(checkers);
+        Board checkersBoard = new Board();
+        checkersBoard.SetSize(8);
+        GameRunnerTest checkers = new GameRunnerTest(checkersBoard);
 
         Player player1 = new();
         Player player2 = new();
-        string name = "";
+        string name;
         for (int i = 0; i < 2; i++)
         {
             if (i == 0)
@@ -33,16 +33,16 @@ class Program
                 } while (name == "" || name.Equals(player1.GetName()));
             }
         }
-        bool addPlayer = checkersGame.AddPlayer(player1);
-        bool addPlayer2 = checkersGame.AddPlayer(player2);
+        bool addPlayer = checkers.AddPlayer(player1);
+        bool addPlayer2 = checkers.AddPlayer(player2);
         Console.WriteLine(addPlayer);
         Console.WriteLine($"Player 1 Name: {player1.GetName()}, ID = {player1.GetID()}");
         Console.WriteLine(addPlayer2);
         Console.WriteLine($"Player 2 Name: {player2.GetName()}, ID = {player2.GetID()}");
 
         //2. Get a player's pieces
-        List<Piece> player1Pieces = checkersGame.GetPlayerPieces(player1);
-        List<Piece> player2Pieces = checkersGame.GetPlayerPieces(player2);
+        List<Piece> player1Pieces = checkers.GetPlayerPieces(player1);
+        List<Piece> player2Pieces = checkers.GetPlayerPieces(player2);
         foreach (var piece in player1Pieces)
         {
             Console.WriteLine(piece.GetPieceColor());
@@ -56,14 +56,14 @@ class Program
         // }
 
         // List of Pieces from all player
-        List<Piece> allPiece = player1Pieces.Concat(player2Pieces).ToList();
+        // List<Piece> allPiece = player1Pieces.Concat(player2Pieces).ToList();
 
         //3. Initialize Board %% players init pieces placed
-        DrawBoard(checkersGame);
+        DrawBoard(checkers);
 
         //4. Get a piece of a player
-        int row = 0;
-        int column = 0;
+        int row;
+        int column;
         bool isOwned = false;
         do
         {
@@ -89,10 +89,13 @@ class Program
 
 
         Position piecePos = new Position(row, column);
-        Piece player1Piece = checkersGame.GetPlayerPiece(player1, piecePos);
+        Position piecePos1 = new Position(row + 1, column + 1);
+        Piece player1Piece = checkers.GetPlayerPiece(player1, piecePos);
+        Piece player1Piece1 = checkers.GetPlayerPiece(player1, piecePos1);
+        player1Piece1.SetPieceColor(PieceColor.Red);
 
         //4. Get Available Move of a player's piece
-        List<Position> piece1AvailMove = checkersGame.GetPossibleMove(player1Piece);
+        List<Position> piece1AvailMove = checkers.GetPossibleMove(player1Piece);
         foreach (var position in piece1AvailMove)
         {
             Console.WriteLine(position.GetRow() + "," + position.GetColumn());
@@ -110,7 +113,7 @@ class Program
             baris = int.Parse(post[0]);
             kolom = int.Parse(post[1]);
             origin = new Position(baris, kolom);
-        } while (checkersGame.CheckPiece(baris, kolom) == null);
+        } while (checkers.CheckPiece(baris, kolom) == null);
 
         int newRow;
         int newCol;
@@ -132,24 +135,23 @@ class Program
             }
         } while (destination.GetRow() == 0 && destination.GetColumn() == 0);
 
-        checkersGame.MakeMove(origin, destination);
-        // System.Console.WriteLine(gr.MakeMove(piecePos, moveTo));
-        DrawBoard(checkersGame);
+        checkers.MakeMove(origin, destination);
+        DrawBoard(checkers);
 
-        Console.ReadLine();
+        // Console.ReadLine();
     }
 
-    static void DrawBoard(GameRunner checkersGame)
+    static void DrawBoard(GameRunnerTest gr)
     {
         Console.WriteLine("+---+---+---+---+---+---+---+---+");
-        for (int i = 0; i < checkersGame.GetBoardBoundary(); i++)
+        for (int i = 0; i < gr.GetBoardBoundary(); i++)
         {
-            for (int j = 0; j < checkersGame.GetBoardBoundary(); j++)
+            for (int j = 0; j < gr.GetBoardBoundary(); j++)
             {
                 char aPiece;
                 Rank basic = Rank.Basic;
                 PieceColor black = PieceColor.Black;
-                Piece piece = checkersGame.CheckPiece(i, j);
+                Piece piece = gr.CheckPiece(i, j);
                 if (piece != null)
                 {
                     Rank pieceRank = piece.GetRank();
