@@ -42,7 +42,7 @@ class Program
 
         //2. Get a player's pieces
         List<Piece> player1Pieces = checkers.GetPlayerPieces(player1);
-        List<Piece> player2Pieces = checkers.GetPlayerPieces(player2);
+        // List<Piece> player2Pieces = checkers.GetPlayerPieces(player2);
         foreach (var piece in player1Pieces)
         {
             Console.WriteLine(piece.GetPieceColor());

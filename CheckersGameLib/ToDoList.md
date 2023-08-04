@@ -5,6 +5,6 @@ What to do in 03-08-2023
 
 What to do in 04-08-2023
 
-- Add more double move in PossibleMove logic
+- Add more double move in PossibleMove logic --Done
 - Implement SwitchTurn()
 - Looping game till has a winner
