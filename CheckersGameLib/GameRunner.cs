@@ -11,6 +11,13 @@ public partial class GameRunner
 
     public GameRunner()
     {
+        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Piece>));
+
+        // Deserialize
+        using (FileStream fs = new FileStream(@"..\CheckersGameLib\pieces.json", FileMode.Open))
+        {
+            importedPieces = (List<Piece>?)serializer.ReadObject(fs);
+        }
     }
 
     public GameRunner(IBoard board)
