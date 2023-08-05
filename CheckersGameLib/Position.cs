@@ -1,14 +1,18 @@
 namespace CheckersGameLib;
+using System.Runtime.Serialization;
 
+[DataContract]
 public class Position
 {
+    [DataMember]
     private int _row;
+    [DataMember]
     private int _column;
 
     public Position()
     {
-        _row = 0;
-        _column = 0;
+        // _row = 0;
+        // _column = 0;
     }
 
     public Position(int row, int column)

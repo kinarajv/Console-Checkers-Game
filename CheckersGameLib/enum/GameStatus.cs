@@ -2,7 +2,7 @@ namespace CheckersGameLib;
 
 public enum GameStatus
 {
-    InGame,
+    Ongoing,
     BlackWin,
     RedWin
 }

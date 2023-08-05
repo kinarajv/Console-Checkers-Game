@@ -1,3 +1,4 @@
+using System.Runtime.Serialization.Json;
 using System.Text;
 
 namespace CheckersGameLib;
@@ -9,6 +10,8 @@ public partial class GameRunner
     // private PieceColor _pieceColor;
     // private Position _position;
     private GameStatus _gameStatus;
+    private bool _isPlayerTurn = true;
+    List<Piece> importedPieces;
 
     public GameRunner()
     {
@@ -17,6 +20,13 @@ public partial class GameRunner
     public GameRunner(IBoard board)
     {
         _board = board;
+        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Piece>));
+
+        // Deserialize
+        using (FileStream fs = new FileStream(@"..\CheckersGameLib\pieces.json", FileMode.Open))
+        {
+            importedPieces = (List<Piece>)serializer.ReadObject(fs);
+        }
     }
 
     public int GetBoardBoundary()
@@ -27,7 +37,6 @@ public partial class GameRunner
     public bool AddPlayer(IPlayer player)
     {
         List<Piece> pieces = new();
-        List<Position> position = new();
         Random random = new Random();
         int id = random.Next(20000, 30000);
 
@@ -39,26 +48,9 @@ public partial class GameRunner
             if (playerTotal == 0)
             {
                 player.SetID(id);
-                int i = 0;
-                for (int row = 0; row < 3; row++)
+                for (int i = 0; i < importedPieces.Count - 12; i++)
                 {
-                    for (int column = 0; column < 8; column++)
-                    {
-                        int total = row + column;
-                        if (total % 2 != 0)
-                        {
-                            pieces.Add(new Piece());
-                            position.Add(new Position());
-                            pieces[i].SetPieceColor((PieceColor)playerTotal);
-                            pieces[i].SetRank(Rank.Basic);
-                            position[i].SetRow(row);
-                            position[i].SetColumn(column);
-                            pieces[i].SetPosition(position[i]);
-                            // System.Console.WriteLine((PieceColor)playerTotal);
-                            // System.Console.WriteLine("x: " + pieces[i].GetPosition().GetRow() + ", y: " + pieces[i].GetPosition().GetColumn());
-                            i++;
-                        }
-                    }
+                    pieces.Add(importedPieces[i]);
                 }
             }
             // If there is a player
@@ -79,26 +71,9 @@ public partial class GameRunner
                     }
                     id = random.Next(20000, 30000);
                 } while (isIDUnique > 0);
-                int i = 0;
-                for (int row = 5; row < 8; row++)
+                for (int i = 12; i < importedPieces.Count; i++)
                 {
-                    for (int column = 0; column < 8; column++)
-                    {
-                        int total = row + column;
-                        if (total % 2 != 0)
-                        {
-                            pieces.Add(new Piece());
-                            position.Add(new Position());
-                            pieces[i].SetPieceColor((PieceColor)playerTotal);
-                            pieces[i].SetRank(Rank.Basic);
-                            position[i].SetRow(row);
-                            position[i].SetColumn(column);
-                            pieces[i].SetPosition(position[i]);
-                            // System.Console.WriteLine(pieces[i].SetPieceColor((PieceColor)playerTotal));
-                            // System.Console.WriteLine("x: " + pieces[i].GetPosition().GetRow() + ", y: " + pieces[i].GetPosition().GetColumn());
-                            i++;
-                        }
-                    }
+                    pieces.Add(importedPieces[i]);
                 }
             }
             // System.Console.WriteLine((PieceColor)playerTotal);
@@ -131,16 +106,23 @@ public partial class GameRunner
     // Get Player Pieces
     public List<Piece> GetPlayerPieces(IPlayer player)
     {
-        // List<Piece> playerPieces = new();
-        bool piecesPerPlayer = _playerPieces.TryGetValue(player, out List<Piece> playerPieces);
-        if (piecesPerPlayer)
+        List<Piece> playerPieces = new();
+
+        foreach (var kvp in _playerPieces)
         {
-            return playerPieces;
+            var pieces = kvp.Value.ToList();
+            if (kvp.Key == player)
+            {
+                foreach (var piece in pieces)
+                {
+                    if (!piece.GetIsEaten())
+                    {
+                        playerPieces.Add(piece);
+                    }
+                }
+            }
         }
-        else
-        {
-            return null;
-        }
+        return playerPieces;
     }
 
     // Get player's piece position
@@ -159,9 +141,50 @@ public partial class GameRunner
                 return aPiece;
             }
         }
-
         return piece;
     }
 
     // Switch Player Turn
+    public bool SwitchTurn()
+    {
+        if (_isPlayerTurn)
+        {
+            _isPlayerTurn = false;
+        }
+        else
+        {
+            _isPlayerTurn = true;
+        }
+        return _isPlayerTurn;
+    }
+
+    public GameStatus GetGameStatus()
+    {
+        foreach (var kvp in _playerPieces)
+        {
+            int eatenPieces = 0;
+            PieceColor pc = PieceColor.Black;
+            var pieces = kvp.Value.ToList();
+            foreach (var piece in pieces)
+            {
+                if (piece.GetIsEaten())
+                {
+                    eatenPieces++;
+                    pc = piece.GetPieceColor();
+                }
+            }
+            if (eatenPieces == 12)
+            {
+                if (pc.Equals(PieceColor.Black))
+                {
+                    return GameStatus.RedWin;
+                }
+                else
+                {
+                    return GameStatus.BlackWin;
+                }
+            }
+        }
+        return GameStatus.Ongoing;
+    }
 }

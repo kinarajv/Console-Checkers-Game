@@ -1,11 +1,28 @@
+using System.Runtime.Serialization;
+
 namespace CheckersGameLib;
 
+[DataContract]
 public class Piece
 {
     private bool _isEaten = false;
+    [DataMember]
     private Rank _rank;
+    [DataMember]
     private Position _position;
+    [DataMember]
     private PieceColor _pieceColor;
+
+    public Piece()
+    {
+    }
+
+    public Piece(Position position, Rank rank, PieceColor pieceColor)
+    {
+        _position = position;
+        _rank = rank;
+        _pieceColor = pieceColor;
+    }
 
     public bool GetIsEaten()
     {
