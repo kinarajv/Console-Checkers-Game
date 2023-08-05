@@ -12,4 +12,6 @@ What to do in 04-08-2023
 What to do in 06-08-2023
 
 - Looping game till has a winner
+- Add PromoteToKing() method
+- Implement Delegate and/or Event
 - Make Console More interactive (optional)

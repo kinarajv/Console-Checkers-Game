@@ -1,17 +1,13 @@
 using System.Runtime.Serialization.Json;
-using System.Text;
 
 namespace CheckersGameLib;
 
 public partial class GameRunner
 {
     private Dictionary<IPlayer, List<Piece>> _playerPieces = new Dictionary<IPlayer, List<Piece>>();
-    private IBoard _board;
-    // private PieceColor _pieceColor;
-    // private Position _position;
-    private GameStatus _gameStatus;
+    readonly private IBoard _board;
     private bool _isPlayerTurn = true;
-    List<Piece> importedPieces;
+    readonly List<Piece>? importedPieces;
 
     public GameRunner()
     {
@@ -25,7 +21,7 @@ public partial class GameRunner
         // Deserialize
         using (FileStream fs = new FileStream(@"..\CheckersGameLib\pieces.json", FileMode.Open))
         {
-            importedPieces = (List<Piece>)serializer.ReadObject(fs);
+            importedPieces = (List<Piece>?)serializer.ReadObject(fs);
         }
     }
 
