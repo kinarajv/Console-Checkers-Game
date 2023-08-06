@@ -6,7 +6,7 @@ public partial class GameRunner
 {
     private Dictionary<IPlayer, List<Piece>> _playerPieces = new Dictionary<IPlayer, List<Piece>>();
     readonly private IBoard _board;
-    private bool _isPlayerTurn = true;
+    private bool _isPlayerTurn = false;
     readonly List<Piece>? importedPieces;
 
     public GameRunner()
@@ -163,22 +163,13 @@ public partial class GameRunner
 
     public GameStatus GetGameStatus()
     {
+        int i = 0;
         foreach (var kvp in _playerPieces)
         {
-            int eatenPieces = 0;
-            PieceColor pc = PieceColor.Black;
-            var pieces = kvp.Value.ToList();
-            foreach (var piece in pieces)
+            int pieceLeft = GetPlayerPieces(kvp.Key).Count;
+            if (pieceLeft == 0)
             {
-                if (piece.GetIsEaten())
-                {
-                    eatenPieces++;
-                    pc = piece.GetPieceColor();
-                }
-            }
-            if (eatenPieces == 12)
-            {
-                if (pc.Equals(PieceColor.Black))
+                if (i == 0)
                 {
                     return GameStatus.RedWin;
                 }
@@ -187,7 +178,53 @@ public partial class GameRunner
                     return GameStatus.BlackWin;
                 }
             }
+            i++;
         }
         return GameStatus.Ongoing;
+    }
+
+    // public int GetPlayerPieceLeft(IPlayer player)
+    // {
+    //     int pieceLeft = 0;
+    //     foreach (var kvp in _playerPieces)
+    //     {
+    //         var pieces = kvp.Value.ToList();
+    //         if (kvp.Key.Equals(player))
+    //         {
+    //             foreach (var piece in pieces)
+    //             {
+    //                 if (!piece.GetIsEaten())
+    //                 {
+    //                     pieceLeft++;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return pieceLeft;
+    // }
+
+    public bool PiecePromotion(Piece p)
+    {
+        if (p.GetPieceColor().Equals(PieceColor.Black))
+        {
+            if (p.GetPosition().GetRow() == 7)
+            {
+                p.SetIsKinged(true);
+            }
+        }
+        else
+        {
+            if (p.GetPosition().GetRow() == 0)
+            {
+                p.SetIsKinged(true);
+            }
+        }
+
+        if (p.GetIsKinged())
+        {
+            p.SetRank(Rank.King);
+            return true;
+        }
+        return false;
     }
 }

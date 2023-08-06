@@ -1,4 +1,4 @@
-﻿using CheckersGameLib;
+using CheckersGameLib;
 
 partial class Program
 {
@@ -33,109 +33,133 @@ partial class Program
                 } while (name == "" || name.Equals(player1.GetName()));
             }
         }
-        bool addPlayer = checkers.AddPlayer(player1);
-        bool addPlayer2 = checkers.AddPlayer(player2);
-        Console.WriteLine(addPlayer);
-        Console.WriteLine($"Player 1 Name: {player1.GetName()}, ID = {player1.GetID()}");
-        Console.WriteLine(addPlayer2);
-        Console.WriteLine($"Player 2 Name: {player2.GetName()}, ID = {player2.GetID()}");
-
-        //2. Get a player's pieces
-        List<Piece> player1Pieces = checkers.GetPlayerPieces(player1);
-        List<Piece> player2Pieces = checkers.GetPlayerPieces(player2);
-        // foreach (var piece in player1Pieces)
-        // {
-        //     Console.WriteLine(piece.GetPieceColor());
-        //     Console.WriteLine(piece.GetPosition().GetRow() + ", " + piece.GetPosition().GetColumn());
-        // }
-        // System.Console.WriteLine("============================================================");
-        // foreach (var piece in player2Pieces)
-        // {
-        //     Console.WriteLine(piece.GetPieceColor());
-        //     Console.WriteLine(piece.GetPosition().GetRow() + ", " + piece.GetPosition().GetColumn());
-        // }
-
-        // List of Pieces from all player
-        // List<Piece> allPiece = player1Pieces.Concat(player2Pieces).ToList();
+        checkers.AddPlayer(player1);
+        checkers.AddPlayer(player2);
 
         //3. Initialize Board %% players init pieces placed
+        Console.Clear();
+        Console.WriteLine($"Player 1 Name = {player1.GetName()}, ID = {player1.GetID()}, Piece left = {checkers.GetPlayerPieces(player1).Count}");
+        Console.WriteLine($"Player 2 Name: {player2.GetName()}, ID = {player2.GetID()}, Piece left = {checkers.GetPlayerPieces(player2).Count}");
         DrawBoard(checkers);
+        System.Console.WriteLine("=========================================");
+        if (checkers.SwitchTurn())
+        {
+            Console.WriteLine($"               {player1.GetName()} Turn               ");
+        }
+        else
+        {
+            Console.WriteLine($"               {player2.GetName()} Turn               ");
+        }
+        System.Console.WriteLine("=========================================");
 
         //4. Get a piece of a player
         int row;
         int column;
-        bool isOwned = false;
 
         //5. Make move of selected piece
-        int baris;
-        int kolom;
-        string[] post;
+        int currRow;
+        int currCol;
+        string[] currPos;
         Position origin;
 
         int newRow;
         int newCol;
-        string[] pos;
+        string[] newPos;
         Position destination;
 
-        // Player 1 turn 1
-        do
+        while (checkers.GetGameStatus() == GameStatus.Ongoing)
         {
-            // Get Possible Move
+            // Player 1 turn 1
             do
             {
-                Console.Write("Input your piece (row,column): ");
-                string[] piecePost = Console.ReadLine().Split(",");
-                row = int.Parse(piecePost[0]);
-                column = int.Parse(piecePost[1]);
-                foreach (var playerPiece in player1Pieces)
+                // Select piece that want to move
+                do
                 {
-                    int pieceRow = playerPiece.GetPosition().GetRow();
-                    int pieceColumn = playerPiece.GetPosition().GetColumn();
-                    if (row == pieceRow && column == pieceColumn)
-                    {
-                        isOwned = true;
-                        break;
-                    }
-                    else
-                    {
-                        isOwned = false;
-                    }
+                    Console.Write("Input your piece's position(row,column): ");
+                    currPos = Console.ReadLine().Split(",");
+                    currRow = int.Parse(currPos[0]);
+                    currCol = int.Parse(currPos[1]);
+                    origin = new Position();
+                    origin.SetRow(currRow);
+                    origin.SetColumn(currCol);
+                } while (checkers.CheckPiece(currRow, currCol) == null);
+                Piece p = checkers.CheckPiece(currRow, currCol);
+                var possibleMove = checkers.GetPossibleMove(p);
+                foreach (var pos in possibleMove)
+                {
+                    System.Console.WriteLine(pos.GetRow() + "," + pos.GetColumn());
                 }
-            } while (!isOwned);
 
-            Position piecePos = new Position(row, column);
-            Piece player1Piece = checkers.GetPlayerPiece(player1, piecePos);
+                Console.Write("Input your desired position(row,column): ");
+                newPos = Console.ReadLine().Split(",");
+                newRow = int.Parse(newPos[0]);
+                newCol = int.Parse(newPos[1]);
+                destination = new Position();
+                destination.SetRow(newRow);
+                destination.SetColumn(newCol);
+            } while (!checkers.MakeMove(origin, destination));
 
-            //4. Get Available Move of a player's piece
-            List<Position> piece1AvailMove = checkers.GetPossibleMove(player1Piece);
-            foreach (var position in piece1AvailMove)
+            Console.Clear();
+            Console.WriteLine($"Player 1 Name = {player1.GetName()}, ID = {player1.GetID()}, Piece left = {checkers.GetPlayerPieces(player1).Count}");
+            Console.WriteLine($"Player 2 Name: {player2.GetName()}, ID = {player2.GetID()}, Piece left = {checkers.GetPlayerPieces(player2).Count}");
+            DrawBoard(checkers);
+            System.Console.WriteLine("=========================================");
+            if (checkers.SwitchTurn())
             {
-                Console.WriteLine(position.GetRow() + "," + position.GetColumn());
+                Console.WriteLine($"               {player1.GetName()} Turn               ");
             }
+            else
+            {
+                Console.WriteLine($"               {player2.GetName()} Turn               ");
+            }
+            System.Console.WriteLine("=========================================");
 
-            // Select piece that want to move
+            // Player 2 turn 1
             do
             {
-                Console.Write("Input your piece's position(row,column): ");
-                post = Console.ReadLine().Split(",");
-                baris = int.Parse(post[0]);
-                kolom = int.Parse(post[1]);
-                origin = new Position();
-                origin.SetRow(baris);
-                origin.SetColumn(kolom);
-            } while (checkers.CheckPiece(baris, kolom) == null);
+                // Select piece that want to move
+                do
+                {
+                    Console.Write("Input your piece's position(row,column): ");
+                    currPos = Console.ReadLine().Split(",");
+                    currRow = int.Parse(currPos[0]);
+                    currCol = int.Parse(currPos[1]);
+                    origin = new Position();
+                    origin.SetRow(currRow);
+                    origin.SetColumn(currCol);
+                } while (checkers.CheckPiece(currRow, currCol) == null);
+                Piece p = checkers.CheckPiece(currRow, currCol);
+                var possibleMove = checkers.GetPossibleMove(p);
+                foreach (var pos in possibleMove)
+                {
+                    System.Console.WriteLine(pos.GetRow() + "," + pos.GetColumn());
+                }
 
-            Console.Write("Input your desired position(row,column): ");
-            pos = Console.ReadLine().Split(",");
-            newRow = int.Parse(pos[0]);
-            newCol = int.Parse(pos[1]);
-            destination = new Position();
-            destination.SetRow(newRow);
-            destination.SetColumn(newCol);
-        } while (!checkers.MakeMove(origin, destination));
+                Console.Write("Input your desired position(row,column): ");
+                newPos = Console.ReadLine().Split(",");
+                newRow = int.Parse(newPos[0]);
+                newCol = int.Parse(newPos[1]);
+                destination = new Position();
+                destination.SetRow(newRow);
+                destination.SetColumn(newCol);
+            } while (!checkers.MakeMove(origin, destination));
 
-        Console.Clear();
-        DrawBoard(checkers);
+            Console.Clear();
+            Console.WriteLine($"Player 1 Name = {player1.GetName()}, ID = {player1.GetID()}, Piece left = {checkers.GetPlayerPieces(player1).Count}");
+            Console.WriteLine($"Player 2 Name: {player2.GetName()}, ID = {player2.GetID()}, Piece left = {checkers.GetPlayerPieces(player2).Count}");
+            DrawBoard(checkers);
+            System.Console.WriteLine("=========================================");
+            if (checkers.SwitchTurn())
+            {
+                Console.WriteLine($"               {player1.GetName()} Turn               ");
+            }
+            else
+            {
+                Console.WriteLine($"               {player2.GetName()} Turn               ");
+            }
+            System.Console.WriteLine("=========================================");
+        }
+
         if (checkers.GetGameStatus().Equals(GameStatus.BlackWin))
         {
             System.Console.WriteLine("Player 1 Win");
@@ -143,158 +167,6 @@ partial class Program
         else if (checkers.GetGameStatus().Equals(GameStatus.RedWin))
         {
             System.Console.WriteLine("Player 2 Win");
-        }
-        else
-        {
-            System.Console.WriteLine("Game is still ongoing");
-        }
-
-        checkers.SwitchTurn();
-
-        // Player 2 turn 1
-        do
-        {
-            // Get Possible Move
-            do
-            {
-                Console.Write("Input your piece (row,column): ");
-                string[] piecePost = Console.ReadLine().Split(",");
-                row = int.Parse(piecePost[0]);
-                column = int.Parse(piecePost[1]);
-                foreach (var playerPiece in player2Pieces)
-                {
-                    int pieceRow = playerPiece.GetPosition().GetRow();
-                    int pieceColumn = playerPiece.GetPosition().GetColumn();
-                    if (row == pieceRow && column == pieceColumn)
-                    {
-                        isOwned = true;
-                        break;
-                    }
-                    else
-                    {
-                        isOwned = false;
-                    }
-                }
-            } while (!isOwned);
-
-            Position piecePos = new Position(row, column);
-            Piece player2Piece = checkers.GetPlayerPiece(player2, piecePos);
-
-            // 4. Get Available Move of a player's piece
-            List<Position> piece2AvailMove = checkers.GetPossibleMove(player2Piece);
-            foreach (var position in piece2AvailMove)
-            {
-                Console.WriteLine(position.GetRow() + "," + position.GetColumn());
-            }
-
-            // Select piece that want to move
-            do
-            {
-                Console.Write("Input your piece's position(row,column): ");
-                post = Console.ReadLine().Split(",");
-                baris = int.Parse(post[0]);
-                kolom = int.Parse(post[1]);
-                origin = new Position();
-                origin.SetRow(baris);
-                origin.SetColumn(kolom);
-            } while (checkers.CheckPiece(baris, kolom) == null);
-
-            Console.Write("Input your desired position(row,column): ");
-            pos = Console.ReadLine().Split(",");
-            newRow = int.Parse(pos[0]);
-            newCol = int.Parse(pos[1]);
-            destination = new Position();
-            destination.SetRow(newRow);
-            destination.SetColumn(newCol);
-        } while (!checkers.MakeMove(origin, destination));
-
-        Console.Clear();
-        DrawBoard(checkers);
-        if (checkers.GetGameStatus().Equals(GameStatus.BlackWin))
-        {
-            System.Console.WriteLine("Player 1 Win");
-        }
-        else if (checkers.GetGameStatus().Equals(GameStatus.RedWin))
-        {
-            System.Console.WriteLine("Player 2 Win");
-        }
-        else
-        {
-            System.Console.WriteLine("Game is still ongoing");
-        }
-
-        checkers.SwitchTurn();
-
-        // Player 1 turn 2
-        do
-        {
-            // Get Possible Move
-            do
-            {
-                Console.Write("Input your piece (row,column): ");
-                string[] piecePost = Console.ReadLine().Split(",");
-                row = int.Parse(piecePost[0]);
-                column = int.Parse(piecePost[1]);
-                foreach (var playerPiece in player1Pieces)
-                {
-                    int pieceRow = playerPiece.GetPosition().GetRow();
-                    int pieceColumn = playerPiece.GetPosition().GetColumn();
-                    if (row == pieceRow && column == pieceColumn)
-                    {
-                        isOwned = true;
-                        break;
-                    }
-                    else
-                    {
-                        isOwned = false;
-                    }
-                }
-            } while (!isOwned);
-
-            Position piecePos = new Position(row, column);
-            Piece player1Piece = checkers.GetPlayerPiece(player1, piecePos);
-
-            //4. Get Available Move of a player's piece
-            List<Position> piece1AvailMove = checkers.GetPossibleMove(player1Piece);
-            foreach (var position in piece1AvailMove)
-            {
-                Console.WriteLine(position.GetRow() + "," + position.GetColumn());
-            }
-
-            // Select piece that want to move
-            do
-            {
-                Console.Write("Input your piece's position(row,column): ");
-                post = Console.ReadLine().Split(",");
-                baris = int.Parse(post[0]);
-                kolom = int.Parse(post[1]);
-                origin = new Position();
-                origin.SetRow(baris);
-                origin.SetColumn(kolom);
-            } while (checkers.CheckPiece(baris, kolom) == null);
-
-            Console.Write("Input your desired position(row,column): ");
-            pos = Console.ReadLine().Split(",");
-            newRow = int.Parse(pos[0]);
-            newCol = int.Parse(pos[1]);
-            destination = new Position();
-            destination.SetRow(newRow);
-            destination.SetColumn(newCol);
-        } while (!checkers.MakeMove(origin, destination));
-
-        Console.Clear();
-        DrawBoard(checkers);
-        if (checkers.GetGameStatus().Equals(GameStatus.BlackWin))
-        {
-            System.Console.WriteLine("Player 1 Win");
-        }
-        else if (checkers.GetGameStatus().Equals(GameStatus.RedWin))
-        {
-            System.Console.WriteLine("Player 2 Win");
-        }
-        else
-        {
-            System.Console.WriteLine("Game is still ongoing");
         }
     }
 }

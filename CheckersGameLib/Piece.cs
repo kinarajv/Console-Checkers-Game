@@ -5,13 +5,14 @@ namespace CheckersGameLib;
 [DataContract]
 public class Piece
 {
-    private bool _isEaten = false;
     [DataMember]
     private Rank _rank;
     [DataMember]
     private Position _position;
     [DataMember]
     private PieceColor _pieceColor;
+    private bool _isEaten = false;
+    private bool _isKinged = false;
 
     public Piece()
     {
@@ -22,17 +23,6 @@ public class Piece
         _position = position;
         _rank = rank;
         _pieceColor = pieceColor;
-    }
-
-    public bool GetIsEaten()
-    {
-        return _isEaten;
-    }
-
-    public bool SetIsEaten(bool isEaten)
-    {
-        _isEaten = isEaten;
-        return _isEaten;
     }
 
     public Rank GetRank()
@@ -86,5 +76,27 @@ public class Piece
             }
         }
         return false;
+    }
+
+    public bool GetIsEaten()
+    {
+        return _isEaten;
+    }
+
+    public bool SetIsEaten(bool isEaten)
+    {
+        _isEaten = isEaten;
+        return _isEaten;
+    }
+
+    public bool GetIsKinged()
+    {
+        return _isKinged;
+    }
+
+    public bool SetIsKinged(bool isKinged)
+    {
+        _isKinged = isKinged;
+        return _isKinged;
     }
 }
