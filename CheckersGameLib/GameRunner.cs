@@ -25,8 +25,11 @@ public partial class GameRunner
         _board = board;
         DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Piece>));
 
+        string path = @"pieces.json";
+        string fullPath = Path.GetFullPath(path);
+
         // Deserialize
-        using (FileStream fs = new FileStream(@"..\CheckersGameLib\pieces.json", FileMode.Open))
+        using (FileStream fs = new FileStream(fullPath, FileMode.Open))
         {
             importedPieces = (List<Piece>?)serializer.ReadObject(fs);
         }
@@ -182,26 +185,6 @@ public partial class GameRunner
         }
         return GameStatus.Ongoing;
     }
-
-    // public int GetPlayerPieceLeft(IPlayer player)
-    // {
-    //     int pieceLeft = 0;
-    //     foreach (var kvp in _playerPieces)
-    //     {
-    //         var pieces = kvp.Value.ToList();
-    //         if (kvp.Key.Equals(player))
-    //         {
-    //             foreach (var piece in pieces)
-    //             {
-    //                 if (!piece.GetIsEaten())
-    //                 {
-    //                     pieceLeft++;
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return pieceLeft;
-    // }
 
     public bool PiecePromotion(Piece p)
     {

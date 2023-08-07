@@ -1,4 +1,4 @@
-using CheckersGameLib;
+﻿using CheckersGameLib;
 
 partial class Program
 {
@@ -69,7 +69,7 @@ partial class Program
 
         while (checkers.GetGameStatus() == GameStatus.Ongoing)
         {
-            // Player 1 turn 1
+            // Player 1
             do
             {
                 // Select piece that want to move
@@ -82,12 +82,18 @@ partial class Program
                     origin = new Position();
                     origin.SetRow(currRow);
                     origin.SetColumn(currCol);
+                    if (checkers.CheckPiece(currRow, currCol) == null)
+                    {
+                        System.Console.WriteLine("Position invalid! There's no piece there");
+                        System.Console.WriteLine();
+                    }
                 } while (checkers.CheckPiece(currRow, currCol) == null);
                 Piece p = checkers.CheckPiece(currRow, currCol);
                 var possibleMove = checkers.GetPossibleMove(p);
+                System.Console.WriteLine("Possible move: ");
                 foreach (var pos in possibleMove)
                 {
-                    System.Console.WriteLine(pos.GetRow() + "," + pos.GetColumn());
+                    System.Console.WriteLine("- " + pos.GetRow() + "," + pos.GetColumn());
                 }
 
                 Console.Write("Input your desired position(row,column): ");
@@ -97,6 +103,11 @@ partial class Program
                 destination = new Position();
                 destination.SetRow(newRow);
                 destination.SetColumn(newCol);
+                if (!checkers.MakeMove(origin, destination))
+                {
+                    System.Console.WriteLine("Move invalid! It's not possible to move there");
+                    System.Console.WriteLine();
+                }
             } while (!checkers.MakeMove(origin, destination));
 
             Console.Clear();
@@ -114,7 +125,7 @@ partial class Program
             }
             System.Console.WriteLine("=========================================");
 
-            // Player 2 turn 1
+            // Player 2
             do
             {
                 // Select piece that want to move
@@ -127,12 +138,18 @@ partial class Program
                     origin = new Position();
                     origin.SetRow(currRow);
                     origin.SetColumn(currCol);
+                    if (checkers.CheckPiece(currRow, currCol) == null)
+                    {
+                        System.Console.WriteLine("Position invalid! There's no piece there");
+                        System.Console.WriteLine();
+                    }
                 } while (checkers.CheckPiece(currRow, currCol) == null);
                 Piece p = checkers.CheckPiece(currRow, currCol);
                 var possibleMove = checkers.GetPossibleMove(p);
+                System.Console.WriteLine("Possible move: ");
                 foreach (var pos in possibleMove)
                 {
-                    System.Console.WriteLine(pos.GetRow() + "," + pos.GetColumn());
+                    System.Console.WriteLine("- " + pos.GetRow() + "," + pos.GetColumn());
                 }
 
                 Console.Write("Input your desired position(row,column): ");
@@ -142,11 +159,16 @@ partial class Program
                 destination = new Position();
                 destination.SetRow(newRow);
                 destination.SetColumn(newCol);
+                if (!checkers.MakeMove(origin, destination))
+                {
+                    System.Console.WriteLine("Move invalid! It's not possible to move there");
+                    System.Console.WriteLine();
+                }
             } while (!checkers.MakeMove(origin, destination));
 
             Console.Clear();
             Console.WriteLine($"Player 1 Name = {player1.GetName()}, ID = {player1.GetID()}, Piece left = {checkers.GetPlayerPieces(player1).Count}");
-            Console.WriteLine($"Player 2 Name: {player2.GetName()}, ID = {player2.GetID()}, Piece left = {checkers.GetPlayerPieces(player2).Count}");
+            Console.WriteLine($"Player 2 Name = {player2.GetName()}, ID = {player2.GetID()}, Piece left = {checkers.GetPlayerPieces(player2).Count}");
             DrawBoard(checkers);
             System.Console.WriteLine("=========================================");
             if (checkers.SwitchTurn())
@@ -159,14 +181,21 @@ partial class Program
             }
             System.Console.WriteLine("=========================================");
         }
+        System.Console.WriteLine();
 
         if (checkers.GetGameStatus().Equals(GameStatus.BlackWin))
         {
-            System.Console.WriteLine("Player 1 Win");
+            System.Console.WriteLine("=========================================");
+            System.Console.WriteLine($"             {player1.GetName()} Win               ");
+            System.Console.WriteLine("=========================================");
         }
         else if (checkers.GetGameStatus().Equals(GameStatus.RedWin))
         {
-            System.Console.WriteLine("Player 2 Win");
+            System.Console.WriteLine("=========================================");
+            System.Console.WriteLine($"             {player2.GetName()} Win               ");
+            System.Console.WriteLine("=========================================");
         }
+
+        Console.ReadLine();
     }
 }

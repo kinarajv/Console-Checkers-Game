@@ -39,7 +39,7 @@ public class Player : IPlayer
 
     public bool SetID(int id)
     {
-        if (id != 0)
+        if (id != 20000)
         {
             _id = id;
             return true;
