@@ -4,6 +4,8 @@ namespace CheckersGameLib;
 
 public partial class GameRunner
 {
+    public event EventHandler<WinnerEventArgs> WinnerDecided;
+
     private Dictionary<IPlayer, List<Piece>> _playerPieces = new Dictionary<IPlayer, List<Piece>>();
     readonly private IBoard _board;
     private bool _isPlayerTurn;
@@ -181,10 +183,14 @@ public partial class GameRunner
             {
                 if (i == 0)
                 {
+                    WinnerEventArgs we = new WinnerEventArgs(kvp.Key);
+                    OnWinnerDecided(we);
                     return GameStatus.RedWin;
                 }
                 else
                 {
+                    WinnerEventArgs we = new WinnerEventArgs(kvp.Key);
+                    OnWinnerDecided(we);
                     return GameStatus.BlackWin;
                 }
             }
@@ -216,5 +222,13 @@ public partial class GameRunner
             return true;
         }
         return false;
+    }
+
+    protected virtual void OnWinnerDecided(WinnerEventArgs e)
+    {
+        if (WinnerDecided != null)
+        {
+            WinnerDecided?.Invoke(this, e);
+        }
     }
 }
