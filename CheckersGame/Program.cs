@@ -121,6 +121,11 @@ partial class Program
 
             originMessage = "Input your piece's position(row,column): ";
 
+            if (!checkers.GetGameStatus().Equals(GameStatus.Ongoing))
+            {
+                break;
+            }
+
             // Player 2
             do
             {
