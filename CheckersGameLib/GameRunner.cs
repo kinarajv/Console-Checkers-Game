@@ -6,15 +6,20 @@ public partial class GameRunner
 {
     private Dictionary<IPlayer, List<Piece>> _playerPieces = new Dictionary<IPlayer, List<Piece>>();
     readonly private IBoard _board;
-    private bool _isPlayerTurn = false;
+    private bool _isPlayerTurn;
     readonly List<Piece>? importedPieces;
 
     public GameRunner()
     {
+        _isPlayerTurn = false;
+
         DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Piece>));
 
+        string path = @"pieces.json";
+        string fullPath = Path.GetFullPath(path);
+
         // Deserialize
-        using (FileStream fs = new FileStream(@"..\CheckersGameLib\pieces.json", FileMode.Open))
+        using (FileStream fs = new FileStream(fullPath, FileMode.Open))
         {
             importedPieces = (List<Piece>?)serializer.ReadObject(fs);
         }
@@ -23,6 +28,8 @@ public partial class GameRunner
     public GameRunner(IBoard board)
     {
         _board = board;
+        _isPlayerTurn = false;
+
         DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Piece>));
 
         string path = @"pieces.json";
