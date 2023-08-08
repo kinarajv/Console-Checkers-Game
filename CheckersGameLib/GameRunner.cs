@@ -63,9 +63,12 @@ public partial class GameRunner
             if (playerTotal == 0)
             {
                 player.SetID(id);
-                for (int i = 0; i < importedPieces.Count - 12; i++)
+                for (int i = 0; i < importedPieces.Count; i++)
                 {
-                    pieces.Add(importedPieces[i]);
+                    if (importedPieces[i].GetPieceColor().Equals(PieceColor.Black))
+                    {
+                        pieces.Add(importedPieces[i]);
+                    }
                 }
             }
             // If there is a player
@@ -86,9 +89,12 @@ public partial class GameRunner
                     }
                     id = random.Next(20000, 30000);
                 } while (isIDUnique > 0);
-                for (int i = 12; i < importedPieces.Count; i++)
+                for (int i = 0; i < importedPieces.Count; i++)
                 {
-                    pieces.Add(importedPieces[i]);
+                    if (importedPieces[i].GetPieceColor().Equals(PieceColor.Red))
+                    {
+                        pieces.Add(importedPieces[i]);
+                    }
                 }
             }
             // System.Console.WriteLine((PieceColor)playerTotal);

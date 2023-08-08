@@ -1,7 +1,7 @@
 using CheckersGameLib;
 
 public delegate void Print(string x);
-public delegate void PrintLine(string x);
+// public delegate void PrintLine(string x);
 public partial class Program
 {
 
@@ -46,5 +46,10 @@ public partial class Program
     public static void RegisterCheckersWinner(GameRunner gr)
     {
         gr.WinnerDecided += OnWinnerDecided;
+    }
+
+    public static void UnregisterCheckersWinner(GameRunner gr)
+    {
+        gr.WinnerDecided -= OnWinnerDecided;
     }
 }

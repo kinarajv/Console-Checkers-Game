@@ -3,7 +3,7 @@ namespace CheckersGameLib;
 public partial class GameRunner
 {
     // Get Any available move for a player's piece
-    public List<Position> GetPossibleMove(Piece piece)
+    public List<Position> GetPossibleMove(Piece piece) // Decouple
     {
         int row = piece.GetPosition().GetRow();
         int column = piece.GetPosition().GetColumn();

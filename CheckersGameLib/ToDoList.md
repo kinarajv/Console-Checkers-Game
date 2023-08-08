@@ -24,3 +24,9 @@ What to do at 07-08-2023
 - Looping game till has a winner
 - Implement Delegate and/or Event
 - Make Console More interactive (optional)
+
+- Masih bisa milih enemy piece
+- TryParse atau handle error 
+- Dependency
+- Refactor PossibleMove()
+- 

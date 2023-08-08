@@ -9,8 +9,7 @@ partial class Program
         checkersBoard.SetSize(8);
         GameRunner checkers = new GameRunner(checkersBoard);
 
-        Print print = Display;
-        PrintLine printLine = DisplayLine;
+        Print print = DisplayLine;
 
         Player player1 = new();
         Player player2 = new();
@@ -21,7 +20,7 @@ partial class Program
             {
                 do
                 {
-                    Console.WriteLine($"Enter Player {i + 1} Name: ");
+                    print($"Enter Player {i + 1} Name: ");
                     name = Console.ReadLine();
                     player1.SetName(name);
                 } while (name == "");
@@ -30,7 +29,7 @@ partial class Program
             {
                 do
                 {
-                    Console.WriteLine($"Enter Player {i + 1} Name: ");
+                    print($"Enter Player {i + 1} Name: ");
                     name = Console.ReadLine();
                     player2.SetName(name);
                 } while (name == "" || name.Equals(player1.GetName()));
@@ -41,8 +40,8 @@ partial class Program
 
         //3. Initialize Board %% players init pieces placed
         Console.Clear();
-        printLine($"Player 1 Name = {player1.GetName()}, ID = {player1.GetID()}, Piece left = {checkers.GetPlayerPieces(player1).Count}");
-        printLine($"Player 2 Name: {player2.GetName()}, ID = {player2.GetID()}, Piece left = {checkers.GetPlayerPieces(player2).Count}");
+        print($"Player 1 Name = {player1.GetName()}, ID = {player1.GetID()}, Piece left = {checkers.GetPlayerPieces(player1).Count}");
+        print($"Player 2 Name: {player2.GetName()}, ID = {player2.GetID()}, Piece left = {checkers.GetPlayerPieces(player2).Count}");
         DrawBoard(checkers);
 
         DisplayTurn(checkers, player1, player2);
@@ -66,6 +65,9 @@ partial class Program
         {
             string originMessage = "Input your piece's position(row,column): ";
             string destinationMessage = "Input your desired position(row,column): ";
+
+            print = Display;
+
             // Player 1
             do
             {
@@ -81,13 +83,16 @@ partial class Program
                     origin.SetColumn(currCol);
                     originMessage = "Invalid move! Please Try Again. \nInput your piece's position(row,column): ";
                 } while (checkers.CheckPiece(currRow, currCol) == null);
+                print = DisplayLine;
                 Piece p = checkers.CheckPiece(currRow, currCol);
                 var possibleMove = checkers.GetPossibleMove(p);
-                printLine("Possible move: ");
+                print("Possible move: ");
                 foreach (var pos in possibleMove)
                 {
-                    printLine("=> " + pos.GetRow() + "," + pos.GetColumn());
+                    print("=> " + pos.GetRow() + "," + pos.GetColumn());
                 }
+
+                print = Display;
 
                 print(destinationMessage);
                 newPos = Console.ReadLine().Split(",");
@@ -125,13 +130,18 @@ partial class Program
                     origin.SetColumn(currCol);
                     originMessage = "Invalid move! Please Try Again. \nInput your piece's position(row,column): ";
                 } while (checkers.CheckPiece(currRow, currCol) == null);
+
+                print = DisplayLine;
+
                 Piece p = checkers.CheckPiece(currRow, currCol);
                 var possibleMove = checkers.GetPossibleMove(p);
-                printLine("Possible move: ");
+                print("Possible move: ");
                 foreach (var pos in possibleMove)
                 {
-                    printLine("=> " + pos.GetRow() + "," + pos.GetColumn());
+                    print("=> " + pos.GetRow() + "," + pos.GetColumn());
                 }
+
+                print = Display;
 
                 print(destinationMessage);
                 newPos = Console.ReadLine().Split(",");
@@ -153,6 +163,7 @@ partial class Program
         DrawBoard(checkers);
         RegisterCheckersWinner(checkers);
         checkers.GetGameStatus();
+        UnregisterCheckersWinner(checkers);
 
         Console.ReadLine();
     }
