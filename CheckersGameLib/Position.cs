@@ -28,7 +28,7 @@ public class Position
 
     public bool SetRow(int row)
     {
-        if (row < 8)
+        if (row != _row)
         {
             _row = row;
             return true;
@@ -46,7 +46,7 @@ public class Position
 
     public bool SetColumn(int column)
     {
-        if (column < 8)
+        if (column != _column)
         {
             _column = column;
             return true;

@@ -9,7 +9,7 @@ public partial class GameRunner
         int oriCol = origin.GetColumn();
         int desRow = destination.GetRow();
         int desCol = destination.GetColumn();
-        Piece oriPiece = CheckPiece(oriRow, oriCol);
+        ICheckersPiece oriPiece = CheckPiece(oriRow, oriCol);
         PieceColor currColor = _isPlayerTurn ? PieceColor.Black : PieceColor.Red;
 
         List<Position> possibleMove = GetPossibleMove(oriPiece);
@@ -22,25 +22,25 @@ public partial class GameRunner
             {
                 if (oriPiece.GetPieceColor().Equals(currColor))
                 {
-                    Piece pieceP1P1 = CheckPiece(oriRow + 1, oriCol + 1);
-                    Piece pieceP3P3 = CheckPiece(oriRow + 3, oriCol + 3);
-                    Piece pieceP3P1 = CheckPiece(oriRow + 3, oriCol + 1);
-                    Piece pieceP1P3 = CheckPiece(oriRow + 1, oriCol + 3);
+                    ICheckersPiece pieceP1P1 = CheckPiece(oriRow + 1, oriCol + 1);
+                    ICheckersPiece pieceP3P3 = CheckPiece(oriRow + 3, oriCol + 3);
+                    ICheckersPiece pieceP3P1 = CheckPiece(oriRow + 3, oriCol + 1);
+                    ICheckersPiece pieceP1P3 = CheckPiece(oriRow + 1, oriCol + 3);
 
-                    Piece pieceP1M1 = CheckPiece(oriRow + 1, oriCol - 1);
-                    Piece pieceP3M3 = CheckPiece(oriRow + 3, oriCol - 3);
-                    Piece pieceP3M1 = CheckPiece(oriRow + 3, oriCol - 1);
-                    Piece pieceP1M3 = CheckPiece(oriRow + 1, oriCol - 3);
+                    ICheckersPiece pieceP1M1 = CheckPiece(oriRow + 1, oriCol - 1);
+                    ICheckersPiece pieceP3M3 = CheckPiece(oriRow + 3, oriCol - 3);
+                    ICheckersPiece pieceP3M1 = CheckPiece(oriRow + 3, oriCol - 1);
+                    ICheckersPiece pieceP1M3 = CheckPiece(oriRow + 1, oriCol - 3);
 
-                    Piece pieceM1P1 = CheckPiece(oriRow - 1, oriCol + 1);
-                    Piece pieceM3P3 = CheckPiece(oriRow - 3, oriCol + 3);
-                    Piece pieceM3P1 = CheckPiece(oriRow - 3, oriCol + 1);
-                    Piece pieceM1P3 = CheckPiece(oriRow - 1, oriCol + 3);
+                    ICheckersPiece pieceM1P1 = CheckPiece(oriRow - 1, oriCol + 1);
+                    ICheckersPiece pieceM3P3 = CheckPiece(oriRow - 3, oriCol + 3);
+                    ICheckersPiece pieceM3P1 = CheckPiece(oriRow - 3, oriCol + 1);
+                    ICheckersPiece pieceM1P3 = CheckPiece(oriRow - 1, oriCol + 3);
 
-                    Piece pieceM1M1 = CheckPiece(oriRow - 1, oriCol - 1);
-                    Piece pieceM3M3 = CheckPiece(oriRow - 3, oriCol - 3);
-                    Piece pieceM3M1 = CheckPiece(oriRow - 3, oriCol - 1);
-                    Piece pieceM1M3 = CheckPiece(oriRow - 1, oriCol - 3);
+                    ICheckersPiece pieceM1M1 = CheckPiece(oriRow - 1, oriCol - 1);
+                    ICheckersPiece pieceM3M3 = CheckPiece(oriRow - 3, oriCol - 3);
+                    ICheckersPiece pieceM3M1 = CheckPiece(oriRow - 3, oriCol - 1);
+                    ICheckersPiece pieceM1M3 = CheckPiece(oriRow - 1, oriCol - 3);
 
                     // 3,2 => (4,1) => 5,0 => (6,1) => 7,2
 

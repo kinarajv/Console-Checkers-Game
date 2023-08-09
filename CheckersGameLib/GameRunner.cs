@@ -6,7 +6,7 @@ public partial class GameRunner
 {
     public event EventHandler<WinnerEventArgs> WinnerDecided;
 
-    private Dictionary<IPlayer, List<Piece>> _playerPieces = new Dictionary<IPlayer, List<Piece>>();
+    private Dictionary<IPlayer, List<IPiece>> _playerPieces;
     readonly private IBoard _board;
     private bool _isPlayerTurn;
     readonly List<Piece>? importedPieces;
@@ -14,6 +14,7 @@ public partial class GameRunner
     public GameRunner()
     {
         _isPlayerTurn = false;
+        _playerPieces = new Dictionary<IPlayer, List<IPiece>>();
 
         DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Piece>));
 
@@ -31,6 +32,7 @@ public partial class GameRunner
     {
         _board = board;
         _isPlayerTurn = false;
+        _playerPieces = new Dictionary<IPlayer, List<IPiece>>();
 
         DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Piece>));
 
@@ -51,7 +53,7 @@ public partial class GameRunner
 
     public bool AddPlayer(IPlayer player)
     {
-        List<Piece> pieces = new();
+        List<IPiece> pieces = new();
         Random random = new Random();
         int id = random.Next(20000, 30000);
 
@@ -105,12 +107,12 @@ public partial class GameRunner
     }
 
     //Check Piece
-    public Piece CheckPiece(int row, int col)
+    public ICheckersPiece CheckPiece(int row, int col)
     {
         foreach (var kvp in _playerPieces)
         {
             var pieceList = kvp.Value.ToList();
-            foreach (Piece piece in pieceList)
+            foreach (ICheckersPiece piece in pieceList)
             {
                 if (piece.GetPosition().GetRow() == row && piece.GetPosition().GetColumn() == col)
                 {
@@ -125,16 +127,16 @@ public partial class GameRunner
     }
 
     // Get Player Pieces
-    public List<Piece> GetPlayerPieces(IPlayer player)
+    public List<IPiece> GetPlayerPieces(IPlayer player)
     {
-        List<Piece> playerPieces = new();
+        List<IPiece> playerPieces = new();
 
         foreach (var kvp in _playerPieces)
         {
             var pieces = kvp.Value.ToList();
             if (kvp.Key == player)
             {
-                foreach (var piece in pieces)
+                foreach (ICheckersPiece piece in pieces)
                 {
                     if (!piece.GetIsEaten())
                     {
@@ -147,12 +149,11 @@ public partial class GameRunner
     }
 
     // Get player's piece position
-    public Piece GetPlayerPiece(IPlayer player, Position position)
+    public IPiece GetPlayerPiece(IPlayer player, Position position)
     {
-        Piece piece = new Piece();
         int inputRow = position.GetRow();
         int inputColumn = position.GetColumn();
-        _playerPieces.TryGetValue(player, out List<Piece> playerPieces);
+        _playerPieces.TryGetValue(player, out List<IPiece> playerPieces);
         foreach (var aPiece in playerPieces)
         {
             int outRow = aPiece.GetPosition().GetRow();
@@ -162,7 +163,7 @@ public partial class GameRunner
                 return aPiece;
             }
         }
-        return piece;
+        return null;
     }
 
     // Switch Player Turn
@@ -205,7 +206,7 @@ public partial class GameRunner
         return GameStatus.Ongoing;
     }
 
-    public bool PiecePromotion(Piece p)
+    public bool PiecePromotion(ICheckersPiece p)
     {
         if (p.GetPieceColor().Equals(PieceColor.Black))
         {

@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 namespace CheckersGameLib;
 
 [DataContract]
-public class Piece
+public class Piece : ICheckersPiece
 {
     [DataMember]
     private Rank _rank;
@@ -11,11 +11,13 @@ public class Piece
     private Position _position;
     [DataMember]
     private PieceColor _pieceColor;
-    private bool _isEaten = false;
-    private bool _isKinged = false;
+    private bool _isEaten;
+    private bool _isKinged;
 
     public Piece()
     {
+        _isEaten = false;
+        _isKinged = false;
     }
 
     public Piece(Position position, Rank rank, PieceColor pieceColor)
@@ -23,6 +25,8 @@ public class Piece
         _position = position;
         _rank = rank;
         _pieceColor = pieceColor;
+        _isEaten = false;
+        _isKinged = false;
     }
 
     public Rank GetRank()

@@ -9,8 +9,6 @@ partial class Program
         checkersBoard.SetSize(8);
         GameRunner checkers = new GameRunner(checkersBoard);
 
-        Print print = DisplayLine;
-
         Player player1 = new();
         Player player2 = new();
         string name;
@@ -20,7 +18,7 @@ partial class Program
             {
                 do
                 {
-                    print($"Enter Player {i + 1} Name: ");
+                    Display($"Enter Player {i + 1} Name: ");
                     name = Console.ReadLine();
                     player1.SetName(name);
                 } while (name == "");
@@ -29,7 +27,7 @@ partial class Program
             {
                 do
                 {
-                    print($"Enter Player {i + 1} Name: ");
+                    Display($"Enter Player {i + 1} Name: ");
                     name = Console.ReadLine();
                     player2.SetName(name);
                 } while (name == "" || name.Equals(player1.GetName()));
@@ -40,8 +38,8 @@ partial class Program
 
         //3. Initialize Board %% players init pieces placed
         Console.Clear();
-        print($"Player 1 Name = {player1.GetName()}, ID = {player1.GetID()}, Piece left = {checkers.GetPlayerPieces(player1).Count}");
-        print($"Player 2 Name: {player2.GetName()}, ID = {player2.GetID()}, Piece left = {checkers.GetPlayerPieces(player2).Count}");
+        DisplayLine($"Player 1 Name = {player1.GetName()}, ID = {player1.GetID()}, Piece left = {checkers.GetPlayerPieces(player1).Count}");
+        DisplayLine($"Player 2 Name = {player2.GetName()}, ID = {player2.GetID()}, Piece left = {checkers.GetPlayerPieces(player2).Count}");
         DrawBoard(checkers);
 
         DisplayTurn(checkers, player1, player2);
@@ -63,41 +61,80 @@ partial class Program
 
         while (checkers.GetGameStatus().Equals(GameStatus.Ongoing))
         {
-            string originMessage = "Input your piece's position(row,column): ";
-            string destinationMessage = "Input your desired position(row,column): ";
-
-            print = Display;
-
             // Player 1
             do
             {
-                // Select piece that want to move
-                do
+            // Select piece that want to move
+            IfNoMove: do
                 {
-                    print(originMessage);
-                    currPos = Console.ReadLine().Split(",");
-                    currRow = int.Parse(currPos[0]);
-                    currCol = int.Parse(currPos[1]);
+                    do
+                    {
+                        Display("Input your piece's position (row,column): ");
+                        currPos = Console.ReadLine().Split(",");
+                        if (currPos.Length != 2)
+                        {
+                            DisplayLine("Input must include row and column only! Please try again with correct format (row,column).");
+                        }
+
+                    } while (currPos.Length != 2);
+                    bool isCurrRowParseable = int.TryParse(currPos[0], out currRow);
+                    bool isCurrColParseable = int.TryParse(currPos[1], out currCol);
                     origin = new Position();
                     origin.SetRow(currRow);
                     origin.SetColumn(currCol);
-                    originMessage = "Invalid move! Please Try Again. \nInput your piece's position(row,column): ";
-                } while (checkers.CheckPiece(currRow, currCol) == null);
-                print = DisplayLine;
-                Piece p = checkers.CheckPiece(currRow, currCol);
-                var possibleMove = checkers.GetPossibleMove(p);
-                print("Possible move: ");
-                foreach (var pos in possibleMove)
+                    if (!isCurrRowParseable || !isCurrColParseable)
+                    {
+                        DisplayLine("Input invalid! Please try again with correct format (row,column).");
+                    }
+                    else if (currRow >= checkers.GetBoardBoundary() || currCol >= checkers.GetBoardBoundary())
+                    {
+                        DisplayLine("Input out of bound! Please try again with input in range of 0 - 7.");
+                    }
+                    else if (checkers.GetPlayerPiece(player1, origin) == null)
+                    {
+                        DisplayLine("No piece in current position!");
+                    }
+                } while (checkers.GetPlayerPiece(player1, origin) == null);
+
+                Piece p = (Piece)checkers.CheckPiece(currRow, currCol);
+                if (checkers.GetPossibleMove(p) != null)
                 {
-                    print("=> " + pos.GetRow() + "," + pos.GetColumn());
+                    var possibleMove = checkers.GetPossibleMove(p);
+                    DisplayLine("Possible move: ");
+                    foreach (var pos in possibleMove)
+                    {
+                        DisplayLine("=> " + pos.GetRow() + "," + pos.GetColumn());
+                    }
+                }
+                else
+                {
+                    DisplayLine("There's no possible move for this piece.");
+                    goto IfNoMove;
                 }
 
-                print = Display;
-
-                print(destinationMessage);
-                newPos = Console.ReadLine().Split(",");
-                newRow = int.Parse(newPos[0]);
-                newCol = int.Parse(newPos[1]);
+                do
+                {
+                    Display("Input your desired position (row,column): ");
+                    newPos = Console.ReadLine().Split(",");
+                    if (newPos.Length != 2)
+                    {
+                        DisplayLine("Input must include row and column only! Please try again with correct format (row,column).");
+                    }
+                } while (newPos.Length != 2);
+                bool isNewRowParseable = int.TryParse(newPos[0], out newRow);
+                bool isNewColParseable = int.TryParse(newPos[1], out newCol);
+                if (!isNewRowParseable || !isNewColParseable)
+                {
+                    DisplayLine("Input invalid! Please try again with correct format (row,column).");
+                }
+                else if (newRow >= checkers.GetBoardBoundary() || newCol >= checkers.GetBoardBoundary())
+                {
+                    DisplayLine("Input out of range! Please try again with input in range of 0 - 7.");
+                }
+                else
+                {
+                    DisplayLine("Invalid move! Please Try Again.");
+                }
                 destination = new Position();
                 destination.SetRow(newRow);
                 destination.SetColumn(newCol);
@@ -108,8 +145,6 @@ partial class Program
             DrawBoard(checkers);
             DisplayTurn(checkers, player1, player2);
 
-            originMessage = "Input your piece's position(row,column): ";
-
             if (!checkers.GetGameStatus().Equals(GameStatus.Ongoing))
             {
                 break;
@@ -118,35 +153,77 @@ partial class Program
             // Player 2
             do
             {
-                // Select piece that want to move
-                do
+            // Select piece that want to move
+            IfNoMove: do
                 {
-                    print(originMessage);
-                    currPos = Console.ReadLine().Split(",");
-                    currRow = int.Parse(currPos[0]);
-                    currCol = int.Parse(currPos[1]);
+                    do
+                    {
+                        Display("Input your piece's position (row,column): ");
+                        currPos = Console.ReadLine().Split(",");
+                        if (currPos.Length != 2)
+                        {
+                            DisplayLine("Input must include row and column! Please try again with correct format (row,column).");
+                        }
+
+                    } while (currPos.Length != 2);
+                    bool isCurrRowParseable = int.TryParse(currPos[0], out currRow);
+                    bool isCurrColParseable = int.TryParse(currPos[1], out currCol);
                     origin = new Position();
                     origin.SetRow(currRow);
                     origin.SetColumn(currCol);
-                    originMessage = "Invalid move! Please Try Again. \nInput your piece's position(row,column): ";
-                } while (checkers.CheckPiece(currRow, currCol) == null);
+                    if (!isCurrRowParseable || !isCurrColParseable)
+                    {
+                        DisplayLine("Input invalid! Please try again with correct format (row,column).");
+                    }
+                    else if (currRow >= checkers.GetBoardBoundary() || currCol >= checkers.GetBoardBoundary())
+                    {
+                        DisplayLine("Input out of bound! Please try again with input in range of 0 - 7.");
+                    }
+                    else if (checkers.GetPlayerPiece(player1, origin) == null)
+                    {
+                        DisplayLine("No piece in current position!");
+                    }
+                } while (checkers.GetPlayerPiece(player2, origin) == null);
 
-                print = DisplayLine;
-
-                Piece p = checkers.CheckPiece(currRow, currCol);
-                var possibleMove = checkers.GetPossibleMove(p);
-                print("Possible move: ");
-                foreach (var pos in possibleMove)
+                Piece p = (Piece)checkers.CheckPiece(currRow, currCol);
+                if (checkers.GetPossibleMove(p) != null)
                 {
-                    print("=> " + pos.GetRow() + "," + pos.GetColumn());
+                    var possibleMove = checkers.GetPossibleMove(p);
+                    DisplayLine("Possible move: ");
+                    foreach (var pos in possibleMove)
+                    {
+                        DisplayLine("=> " + pos.GetRow() + "," + pos.GetColumn());
+                    }
+                }
+                else
+                {
+                    DisplayLine("There's no possible move for this piece.");
+                    goto IfNoMove;
                 }
 
-                print = Display;
-
-                print(destinationMessage);
-                newPos = Console.ReadLine().Split(",");
-                newRow = int.Parse(newPos[0]);
-                newCol = int.Parse(newPos[1]);
+                do
+                {
+                    Display("Input your desired position (row,column): ");
+                    newPos = Console.ReadLine().Split(",");
+                    if (newPos.Length != 2)
+                    {
+                        DisplayLine("Input must include row and column! Please try again with correct format (row,column).");
+                    }
+                } while (newPos.Length != 2);
+                bool isNewRowParseable = int.TryParse(newPos[0], out newRow);
+                bool isNewColParseable = int.TryParse(newPos[1], out newCol);
+                if (!isNewRowParseable || !isNewColParseable)
+                {
+                    DisplayLine("Input invalid! Please try again with correct format (row,column).");
+                }
+                else if (newRow >= checkers.GetBoardBoundary() || newCol >= checkers.GetBoardBoundary())
+                {
+                    DisplayLine("Input out of range! Please try again with input in range of 0 - 7.");
+                }
+                else
+                {
+                    DisplayLine("Invalid move! Please Try Again.");
+                }
                 destination = new Position();
                 destination.SetRow(newRow);
                 destination.SetColumn(newCol);

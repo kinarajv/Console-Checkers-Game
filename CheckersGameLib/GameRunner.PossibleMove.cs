@@ -3,7 +3,7 @@ namespace CheckersGameLib;
 public partial class GameRunner
 {
     // Get Any available move for a player's piece
-    public List<Position> GetPossibleMove(Piece piece) // Decouple
+    public List<Position> GetPossibleMove(ICheckersPiece piece) // Decouple
     {
         int row = piece.GetPosition().GetRow();
         int column = piece.GetPosition().GetColumn();
@@ -14,23 +14,23 @@ public partial class GameRunner
         {
             if (piece.GetPieceColor().Equals(black))
             {
-                Piece pSingleP1P1 = CheckPiece(row + 1, column + 1);
-                Piece pSingleP1M1 = CheckPiece(row + 1, column - 1);
+                ICheckersPiece pSingleP1P1 = CheckPiece(row + 1, column + 1);
+                ICheckersPiece pSingleP1M1 = CheckPiece(row + 1, column - 1);
                 if (pSingleP1P1 != null)
                 {
                     if (!pSingleP1P1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatP2P2 = CheckPiece(row + 2, column + 2);
+                        ICheckersPiece pEatP2P2 = CheckPiece(row + 2, column + 2);
                         if (pEatP2P2 == null && row + 2 < GetBoardBoundary() && column + 2 < GetBoardBoundary())
                         {
                             posList.Add(new Position(row + 2, column + 2));
 
-                            Piece pDoubleP3P3 = CheckPiece(row + 3, column + 3);
+                            ICheckersPiece pDoubleP3P3 = CheckPiece(row + 3, column + 3);
                             if (pDoubleP3P3 != null)
                             {
                                 if (!pDoubleP3P3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP4P4 = CheckPiece(row + 4, column + 4);
+                                    ICheckersPiece pEatP4P4 = CheckPiece(row + 4, column + 4);
                                     if (pEatP4P4 == null && row + 4 < GetBoardBoundary() && column + 4 < GetBoardBoundary())
                                     {
                                         posList.Add(new Position(row + 4, column + 4));
@@ -39,12 +39,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleP3P1 = CheckPiece(row + 3, column + 1);
+                            ICheckersPiece pDoubleP3P1 = CheckPiece(row + 3, column + 1);
                             if (pDoubleP3P1 != null)
                             {
                                 if (!pDoubleP3P1.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP4P0 = CheckPiece(row + 4, column + 0);
+                                    ICheckersPiece pEatP4P0 = CheckPiece(row + 4, column + 0);
                                     if (pEatP4P0 == null && row + 4 < GetBoardBoundary() && column < GetBoardBoundary())
                                     {
                                         if (!posList.Contains(new Position(row + 4, column + 0)))
@@ -63,17 +63,17 @@ public partial class GameRunner
                 {
                     if (!pSingleP1M1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatP2M2 = CheckPiece(row + 2, column - 2);
+                        ICheckersPiece pEatP2M2 = CheckPiece(row + 2, column - 2);
                         if (pEatP2M2 == null && row + 2 < GetBoardBoundary() && column - 2 >= 0)
                         {
                             posList.Add(new Position(row + 2, column - 2));
 
-                            Piece pDoubleP3M3 = CheckPiece(row + 3, column - 3);
+                            ICheckersPiece pDoubleP3M3 = CheckPiece(row + 3, column - 3);
                             if (pDoubleP3M3 != null)
                             {
                                 if (!pDoubleP3M3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP4M4 = CheckPiece(row + 4, column - 4);
+                                    ICheckersPiece pEatP4M4 = CheckPiece(row + 4, column - 4);
                                     if (pEatP4M4 == null && row + 4 < GetBoardBoundary() && column - 4 >= 0)
                                     {
                                         posList.Add(new Position(row + 4, column - 4));
@@ -82,12 +82,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleP3M1 = CheckPiece(row + 3, column - 1);
+                            ICheckersPiece pDoubleP3M1 = CheckPiece(row + 3, column - 1);
                             if (pDoubleP3M1 != null)
                             {
                                 if (!pDoubleP3M1.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP4P0 = CheckPiece(row + 4, column + 0);
+                                    ICheckersPiece pEatP4P0 = CheckPiece(row + 4, column + 0);
                                     if (pEatP4P0 == null && row + 4 < GetBoardBoundary() && column >= 0)
                                     {
                                         if (!posList.Contains(new Position(row + 4, column + 0)))
@@ -119,23 +119,23 @@ public partial class GameRunner
             }
             else
             {
-                Piece pSingleM1P1 = CheckPiece(row - 1, column + 1);
-                Piece pSingleM1M1 = CheckPiece(row - 1, column - 1);
+                ICheckersPiece pSingleM1P1 = CheckPiece(row - 1, column + 1);
+                ICheckersPiece pSingleM1M1 = CheckPiece(row - 1, column - 1);
                 if (pSingleM1P1 != null)
                 {
                     if (pSingleM1P1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatM2P2 = CheckPiece(row - 2, column + 2);
+                        ICheckersPiece pEatM2P2 = CheckPiece(row - 2, column + 2);
                         if (pEatM2P2 == null && row - 2 >= 0 && column + 2 < GetBoardBoundary())
                         {
                             posList.Add(new Position(row - 2, column + 2));
 
-                            Piece pDoubleM3P3 = CheckPiece(row - 3, column + 3);
+                            ICheckersPiece pDoubleM3P3 = CheckPiece(row - 3, column + 3);
                             if (pDoubleM3P3 != null)
                             {
                                 if (pDoubleM3P3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4P4 = CheckPiece(row - 4, column + 4);
+                                    ICheckersPiece pEatM4P4 = CheckPiece(row - 4, column + 4);
                                     if (pEatM4P4 == null && row - 4 >= 0 && column + 4 < GetBoardBoundary())
                                     {
                                         posList.Add(new Position(row - 4, column + 4));
@@ -144,12 +144,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleM3P1 = CheckPiece(row - 3, column + 1);
+                            ICheckersPiece pDoubleM3P1 = CheckPiece(row - 3, column + 1);
                             if (pDoubleM3P1 != null)
                             {
                                 if (pDoubleM3P1.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4P0 = CheckPiece(row - 4, column + 0);
+                                    ICheckersPiece pEatM4P0 = CheckPiece(row - 4, column + 0);
                                     if (pEatM4P0 == null && row - 4 >= 0 && column < GetBoardBoundary())
                                     {
                                         if (!posList.Contains(new Position(row - 4, column + 0)))
@@ -168,17 +168,17 @@ public partial class GameRunner
                 {
                     if (pSingleM1M1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatM2M2 = CheckPiece(row - 2, column - 2);
+                        ICheckersPiece pEatM2M2 = CheckPiece(row - 2, column - 2);
                         if (pEatM2M2 == null && row - 2 >= 0 && column - 2 >= 0)
                         {
                             posList.Add(new Position(row - 2, column - 2));
 
-                            Piece pDoubleM3M3 = CheckPiece(row - 3, column - 3);
+                            ICheckersPiece pDoubleM3M3 = CheckPiece(row - 3, column - 3);
                             if (pDoubleM3M3 != null)
                             {
                                 if (pDoubleM3M3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4M4 = CheckPiece(row - 4, column - 4);
+                                    ICheckersPiece pEatM4M4 = CheckPiece(row - 4, column - 4);
                                     if (pEatM4M4 == null && row - 4 >= 0 && column - 4 >= 0)
                                     {
                                         posList.Add(new Position(row - 4, column - 4));
@@ -187,12 +187,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleM3M1 = CheckPiece(row - 3, column - 1);
+                            ICheckersPiece pDoubleM3M1 = CheckPiece(row - 3, column - 1);
                             if (pDoubleM3M1 != null)
                             {
                                 if (pDoubleM3M1.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4P0 = CheckPiece(row - 4, column + 0);
+                                    ICheckersPiece pEatM4P0 = CheckPiece(row - 4, column + 0);
                                     if (pEatM4P0 == null && row - 4 >= 0 && column < GetBoardBoundary())
                                     {
                                         if (!posList.Contains(new Position(row - 4, column + 0)))
@@ -227,25 +227,25 @@ public partial class GameRunner
         {
             if (piece.GetPieceColor().Equals(black))
             {
-                Piece pSingleP1P1 = CheckPiece(row + 1, column + 1);
-                Piece pSingleP1M1 = CheckPiece(row + 1, column - 1);
-                Piece pSingleM1P1 = CheckPiece(row - 1, column + 1);
-                Piece pSingleM1M1 = CheckPiece(row - 1, column - 1);
+                ICheckersPiece pSingleP1P1 = CheckPiece(row + 1, column + 1);
+                ICheckersPiece pSingleP1M1 = CheckPiece(row + 1, column - 1);
+                ICheckersPiece pSingleM1P1 = CheckPiece(row - 1, column + 1);
+                ICheckersPiece pSingleM1M1 = CheckPiece(row - 1, column - 1);
                 if (pSingleP1P1 != null)
                 {
                     if (!pSingleP1P1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatP2P2 = CheckPiece(row + 2, column + 2);
+                        ICheckersPiece pEatP2P2 = CheckPiece(row + 2, column + 2);
                         if (pEatP2P2 == null && row + 2 < GetBoardBoundary() && column + 2 < GetBoardBoundary())
                         {
                             posList.Add(new Position(row + 2, column + 2));
 
-                            Piece pDoubleP3P3 = CheckPiece(row + 3, column + 3);
+                            ICheckersPiece pDoubleP3P3 = CheckPiece(row + 3, column + 3);
                             if (pDoubleP3P3 != null)
                             {
                                 if (!pDoubleP3P3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP4P4 = CheckPiece(row + 4, column + 4);
+                                    ICheckersPiece pEatP4P4 = CheckPiece(row + 4, column + 4);
                                     if (pEatP4P4 == null && row + 4 < GetBoardBoundary() && column + 4 < GetBoardBoundary())
                                     {
                                         posList.Add(new Position(row + 4, column + 4));
@@ -254,12 +254,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleP3P1 = CheckPiece(row + 3, column + 1);
+                            ICheckersPiece pDoubleP3P1 = CheckPiece(row + 3, column + 1);
                             if (pDoubleP3P1 != null)
                             {
                                 if (!pDoubleP3P1.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP4P0 = CheckPiece(row + 4, column + 0);
+                                    ICheckersPiece pEatP4P0 = CheckPiece(row + 4, column + 0);
                                     if (pEatP4P0 == null && row + 4 < GetBoardBoundary() && column < GetBoardBoundary())
                                     {
                                         if (!posList.Contains(new Position(row + 4, column + 0)))
@@ -271,12 +271,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleP1P3 = CheckPiece(row + 1, column + 3);
+                            ICheckersPiece pDoubleP1P3 = CheckPiece(row + 1, column + 3);
                             if (pDoubleP1P3 != null)
                             {
                                 if (!pDoubleP1P3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP0P4 = CheckPiece(row + 0, column + 4);
+                                    ICheckersPiece pEatP0P4 = CheckPiece(row + 0, column + 4);
                                     if (pEatP0P4 == null && row < GetBoardBoundary() && column + 4 < GetBoardBoundary())
                                     {
                                         posList.Add(new Position(row + 0, column + 4));
@@ -292,16 +292,16 @@ public partial class GameRunner
                 {
                     if (!pSingleP1M1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatP2M2 = CheckPiece(row + 2, column - 2);
+                        ICheckersPiece pEatP2M2 = CheckPiece(row + 2, column - 2);
                         if (pEatP2M2 == null && row + 2 < GetBoardBoundary() && column - 2 >= 0)
                         {
                             posList.Add(new Position(row + 2, column - 2));
 
-                            Piece pDoubleP3M3 = CheckPiece(row + 3, column - 3);
+                            ICheckersPiece pDoubleP3M3 = CheckPiece(row + 3, column - 3);
                             if (pDoubleP3M3 != null)
                                 if (!pDoubleP3M3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP4M4 = CheckPiece(row + 4, column - 4);
+                                    ICheckersPiece pEatP4M4 = CheckPiece(row + 4, column - 4);
                                     if (pEatP4M4 == null && row + 4 < GetBoardBoundary() && column - 4 >= 0)
                                     {
                                         posList.Add(new Position(row + 4, column - 4));
@@ -310,12 +310,12 @@ public partial class GameRunner
                                 }
                         }
 
-                        Piece pDoubleP3M1 = CheckPiece(row + 3, column - 1);
+                        ICheckersPiece pDoubleP3M1 = CheckPiece(row + 3, column - 1);
                         if (pDoubleP3M1 != null)
                         {
                             if (!pDoubleP3M1.GetPieceColor().Equals(black))
                             {
-                                Piece pEatP4P0 = CheckPiece(row + 4, column + 0);
+                                ICheckersPiece pEatP4P0 = CheckPiece(row + 4, column + 0);
                                 if (pEatP4P0 == null && row + 4 < GetBoardBoundary() && column < GetBoardBoundary())
                                 {
                                     if (!posList.Contains(new Position(row + 4, column + 0)))
@@ -327,12 +327,12 @@ public partial class GameRunner
                             }
                         }
 
-                        Piece pDoubleP1M3 = CheckPiece(row + 1, column - 3);
+                        ICheckersPiece pDoubleP1M3 = CheckPiece(row + 1, column - 3);
                         if (pDoubleP1M3 != null)
                         {
                             if (!pDoubleP1M3.GetPieceColor().Equals(black))
                             {
-                                Piece pEatP0M4 = CheckPiece(row + 0, column - 4);
+                                ICheckersPiece pEatP0M4 = CheckPiece(row + 0, column - 4);
                                 if (pEatP0M4 == null && row < GetBoardBoundary() && column - 4 >= 0)
                                 {
                                     posList.Add(new Position(row + 0, column - 4));
@@ -347,17 +347,17 @@ public partial class GameRunner
                 {
                     if (!pSingleM1P1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatM2P2 = CheckPiece(row - 2, column + 2);
+                        ICheckersPiece pEatM2P2 = CheckPiece(row - 2, column + 2);
                         if (pEatM2P2 == null && row - 2 >= 0 && column + 2 < GetBoardBoundary())
                         {
                             posList.Add(new Position(row - 2, column + 2));
 
-                            Piece pDoubleM3P3 = CheckPiece(row - 3, column + 3);
+                            ICheckersPiece pDoubleM3P3 = CheckPiece(row - 3, column + 3);
                             if (pDoubleM3P3 != null)
                             {
                                 if (!pDoubleM3P3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4P4 = CheckPiece(row - 4, column + 4);
+                                    ICheckersPiece pEatM4P4 = CheckPiece(row - 4, column + 4);
                                     if (pEatM4P4 == null && row - 4 >= 0 && column + 4 < GetBoardBoundary())
                                     {
                                         posList.Add(new Position(row - 4, column + 4));
@@ -366,12 +366,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleM3P1 = CheckPiece(row - 3, column + 1);
+                            ICheckersPiece pDoubleM3P1 = CheckPiece(row - 3, column + 1);
                             if (pDoubleM3P1 != null)
                             {
                                 if (!pDoubleM3P1.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4P0 = CheckPiece(row - 4, column + 0);
+                                    ICheckersPiece pEatM4P0 = CheckPiece(row - 4, column + 0);
                                     if (pEatM4P0 == null && row - 4 >= 0 && column < GetBoardBoundary())
                                     {
                                         if (!posList.Contains(new Position(row - 4, column + 0)))
@@ -383,12 +383,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleM1P3 = CheckPiece(row - 1, column + 3);
+                            ICheckersPiece pDoubleM1P3 = CheckPiece(row - 1, column + 3);
                             if (pDoubleM1P3 != null)
                             {
                                 if (!pDoubleM1P3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP0P4 = CheckPiece(row + 0, column + 4);
+                                    ICheckersPiece pEatP0P4 = CheckPiece(row + 0, column + 4);
                                     if (pEatP0P4 == null && row >= 0 && column + 4 < GetBoardBoundary())
                                     {
                                         posList.Add(new Position(row + 0, column + 4));
@@ -404,17 +404,17 @@ public partial class GameRunner
                 {
                     if (!pSingleM1M1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatM2M2 = CheckPiece(row - 2, column - 2);
+                        ICheckersPiece pEatM2M2 = CheckPiece(row - 2, column - 2);
                         if (pEatM2M2 == null && row >= 0 && column >= 0)
                         {
                             posList.Add(new Position(row - 2, column - 2));
 
-                            Piece pDoubleM3M3 = CheckPiece(row - 3, column - 3);
+                            ICheckersPiece pDoubleM3M3 = CheckPiece(row - 3, column - 3);
                             if (pDoubleM3M3 != null)
                             {
                                 if (!pDoubleM3M3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4M4 = CheckPiece(row - 4, column - 4);
+                                    ICheckersPiece pEatM4M4 = CheckPiece(row - 4, column - 4);
                                     if (pEatM4M4 == null && row >= 0 && column >= 0)
                                     {
                                         posList.Add(new Position(row - 4, column - 4));
@@ -423,12 +423,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleM3M1 = CheckPiece(row - 3, column - 1);
+                            ICheckersPiece pDoubleM3M1 = CheckPiece(row - 3, column - 1);
                             if (pDoubleM3M1 != null)
                             {
                                 if (!pDoubleM3M1.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4P0 = CheckPiece(row + 4, column + 0);
+                                    ICheckersPiece pEatM4P0 = CheckPiece(row + 4, column + 0);
                                     if (pEatM4P0 == null && row >= 0 && column < GetBoardBoundary())
                                     {
                                         if (!posList.Contains(new Position(row - 4, column + 0)))
@@ -440,12 +440,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleM1M3 = CheckPiece(row - 1, column - 3);
+                            ICheckersPiece pDoubleM1M3 = CheckPiece(row - 1, column - 3);
                             if (pDoubleM1M3 != null)
                             {
                                 if (!pDoubleM1M3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP0M4 = CheckPiece(row + 0, column - 4);
+                                    ICheckersPiece pEatP0M4 = CheckPiece(row + 0, column - 4);
                                     if (pEatP0M4 == null && row < GetBoardBoundary() && column >= 0)
                                     {
                                         posList.Add(new Position(row + 0, column - 4));
@@ -491,25 +491,25 @@ public partial class GameRunner
             }
             else
             {
-                Piece pSingleP1P1 = CheckPiece(row + 1, column + 1);
-                Piece pSingleP1M1 = CheckPiece(row + 1, column - 1);
-                Piece pSingleM1P1 = CheckPiece(row - 1, column + 1);
-                Piece pSingleM1M1 = CheckPiece(row - 1, column - 1);
+                ICheckersPiece pSingleP1P1 = CheckPiece(row + 1, column + 1);
+                ICheckersPiece pSingleP1M1 = CheckPiece(row + 1, column - 1);
+                ICheckersPiece pSingleM1P1 = CheckPiece(row - 1, column + 1);
+                ICheckersPiece pSingleM1M1 = CheckPiece(row - 1, column - 1);
                 if (pSingleP1P1 != null)
                 {
                     if (pSingleP1P1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatP2P2 = CheckPiece(row + 2, column + 2);
+                        ICheckersPiece pEatP2P2 = CheckPiece(row + 2, column + 2);
                         if (pEatP2P2 == null && row + 2 < GetBoardBoundary() && column + 2 < GetBoardBoundary())
                         {
                             posList.Add(new Position(row + 2, column + 2));
 
-                            Piece pDoubleP3P3 = CheckPiece(row + 3, column + 3);
+                            ICheckersPiece pDoubleP3P3 = CheckPiece(row + 3, column + 3);
                             if (pDoubleP3P3 != null)
                             {
                                 if (pDoubleP3P3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP4P4 = CheckPiece(row + 4, column + 4);
+                                    ICheckersPiece pEatP4P4 = CheckPiece(row + 4, column + 4);
                                     if (pEatP4P4 == null && row + 4 < GetBoardBoundary() && column + 4 < GetBoardBoundary())
                                     {
                                         posList.Add(new Position(row + 4, column + 4));
@@ -518,12 +518,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleP3P1 = CheckPiece(row + 3, column + 1);
+                            ICheckersPiece pDoubleP3P1 = CheckPiece(row + 3, column + 1);
                             if (pDoubleP3P1 != null)
                             {
                                 if (pDoubleP3P1.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP4P0 = CheckPiece(row + 4, column + 0);
+                                    ICheckersPiece pEatP4P0 = CheckPiece(row + 4, column + 0);
                                     if (pEatP4P0 == null && row + 4 < GetBoardBoundary() && column < GetBoardBoundary())
                                     {
                                         if (!posList.Contains(new Position(row + 4, column + 0)))
@@ -535,12 +535,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleP1P3 = CheckPiece(row + 1, column + 3);
+                            ICheckersPiece pDoubleP1P3 = CheckPiece(row + 1, column + 3);
                             if (pDoubleP1P3 != null)
                             {
                                 if (pDoubleP1P3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP0P4 = CheckPiece(row + 0, column + 4);
+                                    ICheckersPiece pEatP0P4 = CheckPiece(row + 0, column + 4);
                                     if (pEatP0P4 == null && row < GetBoardBoundary() && column + 4 < GetBoardBoundary())
                                     {
                                         posList.Add(new Position(row + 0, column + 4));
@@ -556,16 +556,16 @@ public partial class GameRunner
                 {
                     if (pSingleP1M1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatP2M2 = CheckPiece(row + 2, column - 2);
+                        ICheckersPiece pEatP2M2 = CheckPiece(row + 2, column - 2);
                         if (pEatP2M2 == null && row + 2 < GetBoardBoundary() && column - 2 >= 0)
                         {
                             posList.Add(new Position(row + 2, column - 2));
 
-                            Piece pDoubleP3M3 = CheckPiece(row + 3, column - 3);
+                            ICheckersPiece pDoubleP3M3 = CheckPiece(row + 3, column - 3);
                             if (pDoubleP3M3 != null)
                                 if (pDoubleP3M3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP4M4 = CheckPiece(row + 4, column - 4);
+                                    ICheckersPiece pEatP4M4 = CheckPiece(row + 4, column - 4);
                                     if (pEatP4M4 == null && row + 4 < GetBoardBoundary() && column - 4 >= 0)
                                     {
                                         posList.Add(new Position(row + 4, column - 4));
@@ -574,12 +574,12 @@ public partial class GameRunner
                                 }
                         }
 
-                        Piece pDoubleP3M1 = CheckPiece(row + 3, column - 1);
+                        ICheckersPiece pDoubleP3M1 = CheckPiece(row + 3, column - 1);
                         if (pDoubleP3M1 != null)
                         {
                             if (pDoubleP3M1.GetPieceColor().Equals(black))
                             {
-                                Piece pEatP4P0 = CheckPiece(row + 4, column + 0);
+                                ICheckersPiece pEatP4P0 = CheckPiece(row + 4, column + 0);
                                 if (pEatP4P0 == null && row + 4 < GetBoardBoundary() && column < GetBoardBoundary())
                                 {
                                     if (!posList.Contains(new Position(row + 4, column + 0)))
@@ -591,12 +591,12 @@ public partial class GameRunner
                             }
                         }
 
-                        Piece pDoubleP1M3 = CheckPiece(row + 1, column - 3);
+                        ICheckersPiece pDoubleP1M3 = CheckPiece(row + 1, column - 3);
                         if (pDoubleP1M3 != null)
                         {
                             if (pDoubleP1M3.GetPieceColor().Equals(black))
                             {
-                                Piece pEatP0M4 = CheckPiece(row + 0, column - 4);
+                                ICheckersPiece pEatP0M4 = CheckPiece(row + 0, column - 4);
                                 if (pEatP0M4 == null && row < GetBoardBoundary() && column - 4 >= 0)
                                 {
                                     posList.Add(new Position(row + 0, column - 4));
@@ -611,17 +611,17 @@ public partial class GameRunner
                 {
                     if (pSingleM1P1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatM2P2 = CheckPiece(row - 2, column + 2);
+                        ICheckersPiece pEatM2P2 = CheckPiece(row - 2, column + 2);
                         if (pEatM2P2 == null && row - 2 >= 0 && column + 2 < GetBoardBoundary())
                         {
                             posList.Add(new Position(row - 2, column + 2));
 
-                            Piece pDoubleM3P3 = CheckPiece(row - 3, column + 3);
+                            ICheckersPiece pDoubleM3P3 = CheckPiece(row - 3, column + 3);
                             if (pDoubleM3P3 != null)
                             {
                                 if (pDoubleM3P3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4P4 = CheckPiece(row - 4, column + 4);
+                                    ICheckersPiece pEatM4P4 = CheckPiece(row - 4, column + 4);
                                     if (pEatM4P4 == null && row - 4 >= 0 && column + 4 < GetBoardBoundary())
                                     {
                                         posList.Add(new Position(row - 4, column + 4));
@@ -630,12 +630,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleM3P1 = CheckPiece(row - 3, column + 1);
+                            ICheckersPiece pDoubleM3P1 = CheckPiece(row - 3, column + 1);
                             if (pDoubleM3P1 != null)
                             {
                                 if (pDoubleM3P1.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4P0 = CheckPiece(row - 4, column + 0);
+                                    ICheckersPiece pEatM4P0 = CheckPiece(row - 4, column + 0);
                                     if (pEatM4P0 == null && row - 4 >= 0 && column < GetBoardBoundary())
                                     {
                                         if (!posList.Contains(new Position(row - 4, column + 0)))
@@ -647,12 +647,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleM1P3 = CheckPiece(row - 1, column + 3);
+                            ICheckersPiece pDoubleM1P3 = CheckPiece(row - 1, column + 3);
                             if (pDoubleM1P3 != null)
                             {
                                 if (pDoubleM1P3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP0P4 = CheckPiece(row + 0, column + 4);
+                                    ICheckersPiece pEatP0P4 = CheckPiece(row + 0, column + 4);
                                     if (pEatP0P4 == null && row >= 0 && column + 4 < GetBoardBoundary())
                                     {
                                         posList.Add(new Position(row + 0, column + 4));
@@ -668,17 +668,17 @@ public partial class GameRunner
                 {
                     if (pSingleM1M1.GetPieceColor().Equals(black))
                     {
-                        Piece pEatM2M2 = CheckPiece(row - 2, column - 2);
+                        ICheckersPiece pEatM2M2 = CheckPiece(row - 2, column - 2);
                         if (pEatM2M2 == null && row - 2 >= 0 && column - 2 >= 0)
                         {
                             posList.Add(new Position(row - 2, column - 2));
 
-                            Piece pDoubleM3M3 = CheckPiece(row - 3, column - 3);
+                            ICheckersPiece pDoubleM3M3 = CheckPiece(row - 3, column - 3);
                             if (pDoubleM3M3 != null)
                             {
                                 if (pDoubleM3M3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4M4 = CheckPiece(row - 4, column - 4);
+                                    ICheckersPiece pEatM4M4 = CheckPiece(row - 4, column - 4);
                                     if (pEatM4M4 == null && row - 4 >= 0 && column - 4 >= 0)
                                     {
                                         posList.Add(new Position(row - 4, column - 4));
@@ -687,12 +687,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleM3M1 = CheckPiece(row - 3, column - 1);
+                            ICheckersPiece pDoubleM3M1 = CheckPiece(row - 3, column - 1);
                             if (pDoubleM3M1 != null)
                             {
                                 if (pDoubleM3M1.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatM4P0 = CheckPiece(row + 4, column + 0);
+                                    ICheckersPiece pEatM4P0 = CheckPiece(row + 4, column + 0);
                                     if (pEatM4P0 == null && row + 4 >= 0 && column < GetBoardBoundary())
                                     {
                                         if (!posList.Contains(new Position(row - 4, column + 0)))
@@ -704,12 +704,12 @@ public partial class GameRunner
                                 }
                             }
 
-                            Piece pDoubleM1M3 = CheckPiece(row - 1, column - 3);
+                            ICheckersPiece pDoubleM1M3 = CheckPiece(row - 1, column - 3);
                             if (pDoubleM1M3 != null)
                             {
                                 if (pDoubleM1M3.GetPieceColor().Equals(black))
                                 {
-                                    Piece pEatP0M4 = CheckPiece(row + 0, column - 4);
+                                    ICheckersPiece pEatP0M4 = CheckPiece(row + 0, column - 4);
                                     if (pEatP0M4 == null && row < GetBoardBoundary() && column - 4 >= 0)
                                     {
                                         posList.Add(new Position(row + 0, column - 4));
@@ -754,6 +754,45 @@ public partial class GameRunner
                 }
             }
         }
-        return posList;
+        if (posList.Count > 0)
+        {
+            return posList;
+        }
+        return null;
+    }
+
+    public List<Position> SingleMove(ICheckersPiece piece)
+    {
+        int row = piece.GetPosition().GetRow();
+        int col = piece.GetPosition().GetColumn();
+        List<Position> positions = new List<Position>();
+        if (piece.GetRank().Equals(Rank.Basic))
+        {
+            if (piece.GetPieceColor().Equals(PieceColor.Black))
+            {
+                if (row + 1 < GetBoardBoundary() && col + 1 < GetBoardBoundary())
+                {
+                    positions.Add(new Position(row + 1, col + 1));
+                }
+
+                if (row + 1 < GetBoardBoundary() && col - 1 >= 0)
+                {
+                    positions.Add(new Position(row + 1, col - 1));
+                }
+            }
+            else
+            {
+                if (row - 1 >= 0 && col + 1 < GetBoardBoundary())
+                {
+                    positions.Add(new Position(row - 1, col + 1));
+                }
+
+                if (row - 1 >= 0 && col - 1 >= 0)
+                {
+                    positions.Add(new Position(row - 1, col - 1));
+                }
+            }
+        }
+        return positions;
     }
 }

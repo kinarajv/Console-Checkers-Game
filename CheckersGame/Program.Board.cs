@@ -12,7 +12,7 @@ partial class Program
                 string aPiece;
                 Rank basic = Rank.Basic;
                 PieceColor black = PieceColor.Black;
-                Piece piece = gr.CheckPiece(i, j);
+                ICheckersPiece piece = gr.CheckPiece(i, j);
                 if (piece != null)
                 {
                     Rank pieceRank = piece.GetRank();
