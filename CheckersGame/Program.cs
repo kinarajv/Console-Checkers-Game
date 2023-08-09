@@ -92,7 +92,7 @@ partial class Program
                     }
                     else if (checkers.GetPlayerPiece(player1, origin) == null)
                     {
-                        DisplayLine("No piece in current position!");
+                        DisplayLine("No piece of yours in current position!");
                     }
                 } while (checkers.GetPlayerPiece(player1, origin) == null);
 
@@ -181,7 +181,7 @@ partial class Program
                     }
                     else if (checkers.GetPlayerPiece(player1, origin) == null)
                     {
-                        DisplayLine("No piece in current position!");
+                        DisplayLine("No piece of yours in current position!");
                     }
                 } while (checkers.GetPlayerPiece(player2, origin) == null);
 

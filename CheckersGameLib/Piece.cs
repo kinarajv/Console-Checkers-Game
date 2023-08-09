@@ -13,6 +13,7 @@ public class Piece : ICheckersPiece
     private PieceColor _pieceColor;
     private bool _isEaten;
     private bool _isKinged;
+    // private readonly Moveset _moveset;
 
     public Piece()
     {
@@ -103,4 +104,17 @@ public class Piece : ICheckersPiece
         _isKinged = isKinged;
         return _isKinged;
     }
+
+    // public bool IsOccupied()
+    // {
+    //     int row = _position.GetRow();
+    //     int col = _position.GetColumn();
+
+    //     Position P1M1 = GetPosition();
+
+    //     if (true)
+    //     {
+
+    //     }
+    // }
 }

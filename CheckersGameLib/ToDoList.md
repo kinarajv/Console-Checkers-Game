@@ -25,7 +25,14 @@ What to do at 07-08-2023
 - Implement Delegate and/or Event
 - Make Console More interactive (optional)
 
+What to do at 08-08-2023
 - Masih bisa milih enemy piece --Done
 - TryParse atau handle error --Done
 - Dependency --Done?
 - Refactor PossibleMove()
+- XML Documentation
+
+What to do at 09-08-2023
+
+- Refactor PossibleMove()
+- XML Documentation

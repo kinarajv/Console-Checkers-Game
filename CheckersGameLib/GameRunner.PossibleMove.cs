@@ -761,38 +761,13 @@ public partial class GameRunner
         return null;
     }
 
-    public List<Position> SingleMove(ICheckersPiece piece)
-    {
-        int row = piece.GetPosition().GetRow();
-        int col = piece.GetPosition().GetColumn();
-        List<Position> positions = new List<Position>();
-        if (piece.GetRank().Equals(Rank.Basic))
-        {
-            if (piece.GetPieceColor().Equals(PieceColor.Black))
-            {
-                if (row + 1 < GetBoardBoundary() && col + 1 < GetBoardBoundary())
-                {
-                    positions.Add(new Position(row + 1, col + 1));
-                }
+    // public List<Position> GetPossibleMove1(ICheckersPiece piece)
+    // {
+    //     int row = piece.GetPosition().GetRow();
+    //     int col = piece.GetPosition().GetColumn();
+    //     List<Position> positions = new List<Position>();
 
-                if (row + 1 < GetBoardBoundary() && col - 1 >= 0)
-                {
-                    positions.Add(new Position(row + 1, col - 1));
-                }
-            }
-            else
-            {
-                if (row - 1 >= 0 && col + 1 < GetBoardBoundary())
-                {
-                    positions.Add(new Position(row - 1, col + 1));
-                }
+    //     return positions;
+    // }
 
-                if (row - 1 >= 0 && col - 1 >= 0)
-                {
-                    positions.Add(new Position(row - 1, col - 1));
-                }
-            }
-        }
-        return positions;
-    }
 }
