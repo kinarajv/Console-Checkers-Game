@@ -761,13 +761,68 @@ public partial class GameRunner
         return null;
     }
 
-    // public List<Position> GetPossibleMove1(ICheckersPiece piece)
-    // {
-    //     int row = piece.GetPosition().GetRow();
-    //     int col = piece.GetPosition().GetColumn();
-    //     List<Position> positions = new List<Position>();
+    public List<Position> GetPossibleMove1(ICheckersPiece piece)
+    {
+        int initRow = piece.GetPosition().GetRow();
+        int initCol = piece.GetPosition().GetColumn();
 
-    //     return positions;
-    // }
+        List<Position> positions = new List<Position>();
 
+        foreach (var position in _moveset.SingleMove(piece))
+        {
+            int row = position.GetRow();
+            int col = position.GetColumn();
+            ICheckersPiece p = CheckPiece(row, col);
+            if (p == null)
+            {
+                positions.Add(position);
+            }
+        }
+
+        foreach (var position in _moveset.SingleJumpMove(piece))
+        {
+            int row = position.GetRow();
+            int col = position.GetColumn();
+
+            if (!IsBlocked(initRow, initCol, row, col))
+            {
+                if (CheckPiece(row, col) == null)
+                {
+                    positions.Add(position);
+                }
+            }
+        }
+
+        if (positions.Count > 0)
+        {
+            return positions;
+        }
+        return null;
+    }
+
+    private bool IsBlocked(int initRow, int initCol, int targetRow, int targetCol)
+    {
+        int rowDiff = targetRow - initRow;
+        int colDiff = targetCol - initCol;
+
+        int rowInc = rowDiff > 0 ? 1 : -1;
+        int colInc = colDiff > 0 ? 1 : -1;
+
+        int currRow = initRow + rowInc;
+        int currCol = initCol + colInc;
+
+        while (currRow != targetRow && currCol != targetCol)
+        {
+            ICheckersPiece initPiece = CheckPiece(initRow, initCol);
+            ICheckersPiece pathPiece = CheckPiece(currRow, currCol);
+            if (pathPiece != null)
+            {
+                if (pathPiece.GetPieceColor().Equals(initPiece.GetPieceColor()))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

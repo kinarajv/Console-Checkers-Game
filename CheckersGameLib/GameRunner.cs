@@ -10,11 +10,13 @@ public partial class GameRunner
     readonly private IBoard _board;
     private bool _isPlayerTurn;
     readonly List<Piece>? importedPieces;
+    readonly Moveset _moveset;
 
     public GameRunner()
     {
         _isPlayerTurn = false;
         _playerPieces = new Dictionary<IPlayer, List<IPiece>>();
+        _moveset = new Moveset();
 
         DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Piece>));
 
@@ -33,6 +35,7 @@ public partial class GameRunner
         _board = board;
         _isPlayerTurn = false;
         _playerPieces = new Dictionary<IPlayer, List<IPiece>>();
+        _moveset = new Moveset();
 
         DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Piece>));
 

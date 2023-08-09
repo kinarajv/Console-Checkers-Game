@@ -104,17 +104,4 @@ public class Piece : ICheckersPiece
         _isKinged = isKinged;
         return _isKinged;
     }
-
-    // public bool IsOccupied()
-    // {
-    //     int row = _position.GetRow();
-    //     int col = _position.GetColumn();
-
-    //     Position P1M1 = GetPosition();
-
-    //     if (true)
-    //     {
-
-    //     }
-    // }
 }
