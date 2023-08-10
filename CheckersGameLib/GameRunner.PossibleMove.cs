@@ -78,7 +78,7 @@ public partial class GameRunner
         if (Math.Abs(rowDiff) == 4 && colDiff == 0)
         {
             currCol = initCol + 1;
-            while (currRow != currRow + (3 * rowInc) && currCol != initCol + 3)
+            while (currRow != initRow + (3 * rowInc) && currCol != initCol + 3)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
                 IPiece pathPiece = CheckPiece(currRow, currCol);
@@ -89,9 +89,11 @@ public partial class GameRunner
                         return true;
                     }
                 }
-                currRow += rowInc;
-                currCol++;
+                currRow += rowInc; // 5, 6
+                currCol++; // 6, 7
             }
+            currRow--;
+            currCol--;
             while (currRow != targetRow + rowInc && currCol != initCol - 1)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
@@ -103,11 +105,11 @@ public partial class GameRunner
                         return true;
                     }
                 }
-                currRow += rowInc;
-                currCol--;
+                currRow += rowInc; // 6, 7, 8
+                currCol--; // 5, 4, 3
             }
-            currRow = initRow + rowInc;
-            while (currRow != currRow + (3 * rowInc) && currCol != initCol - 3)
+            currRow = initRow + rowInc; // 4
+            while (currRow != initRow + (3 * rowInc) && currCol != initCol - 3)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
                 IPiece pathPiece = CheckPiece(currRow, currCol);
@@ -118,9 +120,11 @@ public partial class GameRunner
                         return true;
                     }
                 }
-                currRow += rowInc;
-                currCol++;
+                currRow += rowInc; // 5, 6
+                currCol--; // 2, 1
             }
+            currRow--;
+            currCol++;
             while (currRow != targetRow + rowInc && currCol != initCol + 1)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
@@ -132,14 +136,14 @@ public partial class GameRunner
                         return true;
                     }
                 }
-                currRow += rowInc;
-                currCol--;
+                currRow += rowInc; // 6, 7, 8
+                currCol++; // 3, 4, 5
             }
         }
         else if (rowDiff == 0 && Math.Abs(colDiff) == 4)
         {
             currRow = initRow + 1;
-            while (currRow != initRow + 3 && currCol != currCol + (3 * colInc))
+            while (currRow != initRow + 3 && currCol != initCol + (3 * colInc))
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
                 IPiece pathPiece = CheckPiece(currRow, currCol);
@@ -150,9 +154,11 @@ public partial class GameRunner
                         return true;
                     }
                 }
-                currRow += rowInc;
-                currCol++;
+                currRow++;
+                currCol += colInc;
             }
+            currRow--;
+            currCol--;
             while (currRow != initRow - 1 && currCol != targetCol + colInc)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
@@ -164,11 +170,11 @@ public partial class GameRunner
                         return true;
                     }
                 }
-                currRow += rowInc;
-                currCol--;
+                currRow--;
+                currCol += colInc;
             }
             currCol = initCol + colInc;
-            while (currRow != initRow - 3 && currCol != currCol + (3 * colInc))
+            while (currRow != initRow - 3 && currCol != initCol + (3 * colInc))
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
                 IPiece pathPiece = CheckPiece(currRow, currCol);
@@ -179,9 +185,11 @@ public partial class GameRunner
                         return true;
                     }
                 }
-                currRow += rowInc;
-                currCol++;
+                currRow--;
+                currCol += colInc;
             }
+            currRow++;
+            currCol--;
             while (currRow != initRow + 1 && currCol != targetCol + colInc)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
@@ -193,8 +201,8 @@ public partial class GameRunner
                         return true;
                     }
                 }
-                currRow += rowInc;
-                currCol--;
+                currRow++;
+                currCol += colInc;
             }
         }
         else
@@ -234,7 +242,12 @@ public partial class GameRunner
             IPiece pFirstJump = CheckPiece(newestRow, newestCol);
             if (pFirstJump != null && !pFirstJump.GetPieceColor().Equals(p.GetPieceColor()))
             {
-                return true;
+                newestRow += rowInc;
+                newestCol += colInc;
+                if(CheckPiece(newestRow, newestCol) == null) 
+                {
+                    return true;
+                }
             }
         }
         else if (Math.Abs(rowDiff) == 4 && Math.Abs(colDiff) == 4)
@@ -251,7 +264,12 @@ public partial class GameRunner
                     IPiece pSecondJump = CheckPiece(newestRow, newestCol);
                     if (pSecondJump != null && !pSecondJump.GetPieceColor().Equals(p.GetPieceColor()))
                     {
-                        return true;
+                        newestRow += rowInc;
+                        newestCol += colInc;
+                        if(CheckPiece(newestRow, newestCol) == null) 
+                        {
+                            return true;
+                        }
                     }
 
                 }
@@ -265,14 +283,20 @@ public partial class GameRunner
             if (pFirstPJump != null && !pFirstPJump.GetPieceColor().Equals(p.GetPieceColor()))
             {
                 newestRow += rowInc;
+                newestColP++;
                 if (CheckPiece(newestRow, newestColP) == null)
                 {
                     newestRow += rowInc;
-                    newestColP -= 1;
+                    newestColP--;
                     IPiece pSecondJump = CheckPiece(newestRow, newestColP);
                     if (pSecondJump != null && !pSecondJump.GetPieceColor().Equals(p.GetPieceColor()))
                     {
-                        return true;
+                        newestRow += rowInc;
+                        newestColP--;
+                        if(CheckPiece(newestRow, newestColP) == null) 
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -281,14 +305,20 @@ public partial class GameRunner
             if (pFirstMJump != null && !pFirstMJump.GetPieceColor().Equals(p.GetPieceColor()))
             {
                 newestRow += rowInc;
+                newestColM--;
                 if (CheckPiece(newestRow, newestColM) == null)
                 {
                     newestRow += rowInc;
-                    newestColM += 1;
+                    newestColM++;
                     IPiece pSecondJump = CheckPiece(newestRow, newestColM);
                     if (pSecondJump != null && !pSecondJump.GetPieceColor().Equals(p.GetPieceColor()))
                     {
-                        return true;
+                        newestRow += rowInc;
+                        newestColM++;
+                        if(CheckPiece(newestRow, newestColM) == null) 
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -301,15 +331,21 @@ public partial class GameRunner
             IPiece pFirstPJump = CheckPiece(newestRowP, newestCol);
             if (pFirstPJump != null && !pFirstPJump.GetPieceColor().Equals(p.GetPieceColor()))
             {
+                newestRowP++;
                 newestCol += colInc;
                 if (CheckPiece(newestRowP, newestCol) == null)
                 {
+                    newestRowP--;
                     newestCol += colInc;
-                    newestRowP -= 1;
                     IPiece pSecondJump = CheckPiece(newestRowP, newestCol);
                     if (pSecondJump != null && !pSecondJump.GetPieceColor().Equals(p.GetPieceColor()))
                     {
-                        return true;
+                        newestRowP--;
+                        newestCol += colInc;
+                        if(CheckPiece(newestRowP, newestCol) == null) 
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -317,15 +353,21 @@ public partial class GameRunner
             IPiece pFirstMJump = CheckPiece(newestRowM, newestCol);
             if (pFirstMJump != null && !pFirstMJump.GetPieceColor().Equals(p.GetPieceColor()))
             {
+                newestRowM--;
                 newestCol += colInc;
                 if (CheckPiece(newestRowM, newestCol) == null)
                 {
+                    newestRowM++;
                     newestCol += colInc;
-                    newestRowM += 1;
                     IPiece pSecondJump = CheckPiece(newestRowM, newestCol);
                     if (pSecondJump != null && !pSecondJump.GetPieceColor().Equals(p.GetPieceColor()))
                     {
-                        return true;
+                        newestRowM++;
+                        newestCol += colInc;
+                        if(CheckPiece(newestRowM, newestCol) == null) 
+                        {
+                            return true;
+                        }
                     }
                 }
             }

@@ -237,6 +237,7 @@ partial class Program
         }
 
         Console.Clear();
+        DisplayPlayer(checkers, player1, player2);
         DrawBoard(checkers);
         RegisterCheckersWinner(checkers);
         checkers.GetGameStatus();
