@@ -11,7 +11,7 @@ public class Board : IBoard
 
     public bool SetSize(int size)
     {
-        if (size == 8)
+        if (size >= 8)
         {
             this.size = size;
             return true;

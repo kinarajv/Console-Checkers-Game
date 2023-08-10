@@ -3,7 +3,7 @@ namespace CheckersGameLib;
 public partial class GameRunner
 {
     // Get Any available move for a player's piece
-    public List<Position> GetPossibleMove(ICheckersPiece piece) // Decouple
+    public List<Position> GetPossibleMove(ICheckersPiece piece)
     {
         int row = piece.GetPosition().GetRow();
         int column = piece.GetPosition().GetColumn();
@@ -775,7 +775,10 @@ public partial class GameRunner
             ICheckersPiece p = CheckPiece(row, col);
             if (p == null)
             {
-                positions.Add(position);
+                if (row >= 0 && row < GetBoardBoundary() && col >= 0 && col < GetBoardBoundary())
+                {
+                    positions.Add(position);
+                }
             }
         }
 
@@ -788,7 +791,55 @@ public partial class GameRunner
             {
                 if (CheckPiece(row, col) == null)
                 {
-                    positions.Add(position);
+                    if (row >= 0 && row < GetBoardBoundary() && col >= 0 && col < GetBoardBoundary())
+                    {
+                        positions.Add(position);
+                    }
+                }
+            }
+        }
+
+        foreach (var position in _moveset.DoubleJumpMove(piece))
+        {
+            int row = position.GetRow();
+            int col = position.GetColumn();
+
+            if (Math.Abs(row - initRow) == 4 && Math.Abs(col - initCol) == 4)
+            {
+                if (!IsBlocked(initRow, initCol, row, col))
+                {
+                    if (CheckPiece(row, col) == null)
+                    {
+                        if (row >= 0 && row < GetBoardBoundary() && col >= 0 && col < GetBoardBoundary())
+                        {
+                            positions.Add(position);
+                        }
+                    }
+                }
+            }
+            else if (row - initRow == 0)
+            {
+                int rowPlus = initRow + 2;
+                int colPlus = initCol + 2;
+                if (!IsBlocked(initRow, initCol, rowPlus, colPlus))
+                {
+                    if (rowPlus >= 0 && rowPlus < GetBoardBoundary() && colPlus >= 0 && colPlus < GetBoardBoundary())
+                    {
+                        initRow = rowPlus - 1;
+                        initCol = colPlus - 1;
+                        rowPlus += 2;
+                        colPlus -= 2;
+                        if (!IsBlocked(initRow, initCol, rowPlus, colPlus))
+                        {
+                            if (CheckPiece(rowPlus, colPlus) == null)
+                            {
+                                if (rowPlus >= 0 && rowPlus < GetBoardBoundary() && colPlus >= 0 && colPlus < GetBoardBoundary())
+                                {
+                                    positions.Add(position);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
