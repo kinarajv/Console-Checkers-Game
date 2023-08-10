@@ -179,7 +179,7 @@ partial class Program
                     {
                         DisplayLine("Input out of bound! Please try again with input in range of 0 - 7.");
                     }
-                    else if (checkers.GetPlayerPiece(player1, origin) == null)
+                    else if (checkers.GetPlayerPiece(player2, origin) == null)
                     {
                         DisplayLine("No piece of yours in current position!");
                     }

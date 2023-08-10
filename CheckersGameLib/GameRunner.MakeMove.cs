@@ -42,8 +42,6 @@ public partial class GameRunner
                     ICheckersPiece pieceM3M1 = CheckPiece(oriRow - 3, oriCol - 1);
                     ICheckersPiece pieceM1M3 = CheckPiece(oriRow - 1, oriCol - 3);
 
-                    // 3,2 => (4,1) => 5,0 => (6,1) => 7,2
-
                     if (pieceP3P3 != null && desRow - oriRow == 4 && desCol - oriCol == 4)
                     {
                         if (pieceP1P1 != null)
