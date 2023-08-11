@@ -72,12 +72,12 @@ public partial class GameRunner
         int rowInc = rowDiff > 0 ? 1 : -1;
         int colInc = colDiff > 0 ? 1 : -1;
 
-        int currRow = initRow + rowInc; // 3 => 4
-        int currCol = initCol + colInc; // 4 => 4
+        int currRow = initRow + rowInc; // 7 => 6
+        int currCol = initCol + colInc; // 6 => 6
 
         if (Math.Abs(rowDiff) == 4 && colDiff == 0)
         {
-            currCol = initCol + 1; // 4 => 5
+            currCol = initCol + 1; // 6 => 7
             while (currRow != initRow + (3 * rowInc) && currCol != initCol + 3)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
@@ -89,11 +89,11 @@ public partial class GameRunner
                         return true;
                     }
                 }
-                currRow += rowInc; // 5, 6
-                currCol++; // 6, 7
+                currRow += rowInc; // 5, 4
+                currCol++; // 8, 9
             }
-            currRow--;
-            currCol--;
+            currRow -= rowInc; // 5
+            currCol--; // 8
             while (currRow != targetRow + rowInc && currCol != initCol - 1)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
@@ -105,10 +105,10 @@ public partial class GameRunner
                         return true;
                     }
                 }
-                currRow += rowInc; // 6, 7, 8
-                currCol--; // 5, 4, 3
+                currRow += rowInc; // 4, 3, 2
+                currCol--; // 7, 6, 5
             }
-            currRow = initRow + rowInc; // 4
+            currRow = initRow + rowInc; // 7
             while (currRow != initRow + (3 * rowInc) && currCol != initCol - 3)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
@@ -123,7 +123,7 @@ public partial class GameRunner
                 currRow += rowInc; // 5, 6
                 currCol--; // 2, 1
             }
-            currRow--;
+            currRow -= rowInc;
             currCol++;
             while (currRow != targetRow + rowInc && currCol != initCol + 1)
             {
@@ -158,7 +158,7 @@ public partial class GameRunner
                 currCol += colInc;
             }
             currRow--;
-            currCol--;
+            currCol -= colInc;
             while (currRow != initRow - 1 && currCol != targetCol + colInc)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
@@ -189,7 +189,7 @@ public partial class GameRunner
                 currCol += colInc;
             }
             currRow++;
-            currCol--;
+            currCol -= colInc;
             while (currRow != initRow + 1 && currCol != targetCol + colInc)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);
@@ -244,7 +244,7 @@ public partial class GameRunner
             {
                 newestRow += rowInc;
                 newestCol += colInc;
-                if(CheckPiece(newestRow, newestCol) == null) 
+                if (CheckPiece(newestRow, newestCol) == null)
                 {
                     return true;
                 }
@@ -266,7 +266,7 @@ public partial class GameRunner
                     {
                         newestRow += rowInc;
                         newestCol += colInc;
-                        if(CheckPiece(newestRow, newestCol) == null) 
+                        if (CheckPiece(newestRow, newestCol) == null)
                         {
                             return true;
                         }
@@ -293,7 +293,7 @@ public partial class GameRunner
                     {
                         newestRow += rowInc;
                         newestColP--;
-                        if(CheckPiece(newestRow, newestColP) == null) 
+                        if (CheckPiece(newestRow, newestColP) == null)
                         {
                             return true;
                         }
@@ -315,7 +315,7 @@ public partial class GameRunner
                     {
                         newestRow += rowInc;
                         newestColM++;
-                        if(CheckPiece(newestRow, newestColM) == null) 
+                        if (CheckPiece(newestRow, newestColM) == null)
                         {
                             return true;
                         }
@@ -342,7 +342,7 @@ public partial class GameRunner
                     {
                         newestRowP--;
                         newestCol += colInc;
-                        if(CheckPiece(newestRowP, newestCol) == null) 
+                        if (CheckPiece(newestRowP, newestCol) == null)
                         {
                             return true;
                         }
@@ -364,7 +364,7 @@ public partial class GameRunner
                     {
                         newestRowM++;
                         newestCol += colInc;
-                        if(CheckPiece(newestRowM, newestCol) == null) 
+                        if (CheckPiece(newestRowM, newestCol) == null)
                         {
                             return true;
                         }
