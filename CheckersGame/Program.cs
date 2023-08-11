@@ -11,10 +11,11 @@ partial class Program
         var nlogConfigPath = Path.Combine(currentDirectory, "logs\\nlog.config");
         LogManager.LoadConfiguration(nlogConfigPath);
 
-        logger.Debug("Logging ");
+        logger.Debug("Logging..");
+        logger.Info("Start logging..");
 
         // 1. Add Players
-        Board checkersBoard = new Board();
+        IBoard checkersBoard = new Board();
         if (checkersBoard.SetSize(8))
         {
             logger.Info($"Checkers Board successfully created. Checkers board size = {checkersBoard.GetSize()}");
@@ -25,8 +26,8 @@ partial class Program
         }
         GameRunner checkers = new GameRunner(checkersBoard);
 
-        Player player1 = new();
-        Player player2 = new();
+        IPlayer player1 = new Player();
+        IPlayer player2 = new Player();
         string name;
         for (int i = 1; i <= 2; i++)
         {
@@ -284,7 +285,7 @@ partial class Program
         DisplayPlayer(checkers, player1, player2);
         DrawBoard(checkers);
         RegisterCheckersWinner(checkers);
-        checkers.GetGameStatus();
+        checkers.CheckWinner();
         UnregisterCheckersWinner(checkers);
 
         Console.ReadLine();

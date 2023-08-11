@@ -244,7 +244,7 @@ public partial class GameRunner
             }
         }
 
-        playerPiecesLeft = (Dictionary<IPlayer, int>)playerPiecesLeft.OrderBy(p => p.Value);
+        playerPiecesLeft = playerPiecesLeft.OrderBy(c => c.Value).ToDictionary(p => p.Key, c => c.Value);
 
         if (playerPiecesLeft.Values.First() == 0)
         {

@@ -15,7 +15,7 @@ public partial class Program
         Console.WriteLine(message);
     }
 
-    public static void DisplayPlayer(GameRunner gr, Player player1, Player player2)
+    public static void DisplayPlayer(GameRunner gr, IPlayer player1, IPlayer player2)
     {
         Console.WriteLine($"Player 1 Name = {player1.GetName()}, ID = {player1.GetID()}, Piece left = {gr.GetPlayerPieces(player1).Count}");
         Console.WriteLine($"Player 2 Name = {player2.GetName()}, ID = {player2.GetID()}, Piece left = {gr.GetPlayerPieces(player2).Count}");
@@ -24,7 +24,7 @@ public partial class Program
         logger.Info($"Player 2 Name = {player2.GetName()}, ID = {player2.GetID()}, Piece left = {gr.GetPlayerPieces(player2).Count}");
     }
 
-    public static void DisplayTurn(GameRunner gr, Player player1, Player player2)
+    public static void DisplayTurn(GameRunner gr, IPlayer player1, IPlayer player2)
     {
         Console.WriteLine("=========================================");
         if (gr.SwitchTurn())
