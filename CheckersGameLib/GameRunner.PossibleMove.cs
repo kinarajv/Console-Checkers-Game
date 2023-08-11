@@ -72,12 +72,12 @@ public partial class GameRunner
         int rowInc = rowDiff > 0 ? 1 : -1;
         int colInc = colDiff > 0 ? 1 : -1;
 
-        int currRow = initRow + rowInc;
-        int currCol = initCol + colInc;
+        int currRow = initRow + rowInc; // 3 => 4
+        int currCol = initCol + colInc; // 4 => 4
 
         if (Math.Abs(rowDiff) == 4 && colDiff == 0)
         {
-            currCol = initCol + 1;
+            currCol = initCol + 1; // 4 => 5
             while (currRow != initRow + (3 * rowInc) && currCol != initCol + 3)
             {
                 IPiece initPiece = CheckPiece(initRow, initCol);

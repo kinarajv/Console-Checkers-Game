@@ -1,9 +1,12 @@
 using System.Runtime.Serialization.Json;
+using NLog;
 
 namespace CheckersGameLib;
 
 public partial class GameRunner
 {
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
     public event EventHandler<WinnerEventArgs> WinnerDecided;
 
     private Dictionary<IPlayer, List<IPiece>> _playerPieces;
@@ -14,6 +17,12 @@ public partial class GameRunner
 
     public GameRunner()
     {
+        var currentDirectory = Directory.GetCurrentDirectory();
+        var nlogConfigPath = Path.Combine(currentDirectory, "logs\\nlog.config");
+        LogManager.LoadConfiguration(nlogConfigPath);
+
+        logger.Info("Starting robot arm program");
+
         _isPlayerTurn = false;
         _playerPieces = new Dictionary<IPlayer, List<IPiece>>();
         _moveset = new Moveset();
@@ -28,10 +37,15 @@ public partial class GameRunner
         {
             importedPieces = (List<Piece>?)serializer.ReadObject(fs);
         }
+        logger.Info("Initial game info created");
     }
 
     public GameRunner(IBoard board)
     {
+        var currentDirectory = Directory.GetCurrentDirectory();
+        var nlogConfigPath = Path.Combine(currentDirectory, "logs\\nlog.config");
+        LogManager.LoadConfiguration(nlogConfigPath);
+
         _board = board;
         _isPlayerTurn = false;
         _playerPieces = new Dictionary<IPlayer, List<IPiece>>();
@@ -47,6 +61,7 @@ public partial class GameRunner
         {
             importedPieces = (List<Piece>?)serializer.ReadObject(fs);
         }
+        logger.Info("Initial game info created..");
     }
 
     public int GetBoardBoundary()
@@ -102,8 +117,8 @@ public partial class GameRunner
                     }
                 }
             }
-            // System.Console.WriteLine((PieceColor)playerTotal);
             _playerPieces.Add(player, pieces);
+            logger.Info($"Add {player.GetName()} as checkers player success.");
             return true;
         }
         return false;

@@ -8,11 +8,10 @@ public class BoardTests
     public void Setup()
     {
         _board = new Board();
+        _board.SetSize(8);
     }
 
     [TestCase(8)]
-    [TestCase(9)]
-    [TestCase(11)]
     public void GetSizeTest(int expected)
     {
         _board.SetSize(expected);

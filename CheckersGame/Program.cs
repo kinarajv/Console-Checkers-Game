@@ -1,12 +1,28 @@
 ﻿using CheckersGameLib;
+using NLog;
 
 partial class Program
 {
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
     static void Main()
     {
+        var currentDirectory = Directory.GetCurrentDirectory();
+        var nlogConfigPath = Path.Combine(currentDirectory, "logs\\nlog.config");
+        LogManager.LoadConfiguration(nlogConfigPath);
+
+        logger.Debug("Logging ");
+
         // 1. Add Players
         Board checkersBoard = new Board();
-        checkersBoard.SetSize(8);
+        if (checkersBoard.SetSize(8))
+        {
+            logger.Info($"Checkers Board successfully created. Checkers board size = {checkersBoard.GetSize()}");
+        }
+        else
+        {
+            logger.Error($"Checkers Board not created. Checkers board size minimum size is 8");
+        }
         GameRunner checkers = new GameRunner(checkersBoard);
 
         Player player1 = new();
