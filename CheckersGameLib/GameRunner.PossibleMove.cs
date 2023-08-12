@@ -301,6 +301,8 @@ public partial class GameRunner
                 }
             }
 
+            newestRow = row + rowInc;
+
             IPiece pFirstMJump = CheckPiece(newestRow, newestColM);
             if (pFirstMJump != null && !pFirstMJump.GetPieceColor().Equals(p.GetPieceColor()))
             {
@@ -349,6 +351,8 @@ public partial class GameRunner
                     }
                 }
             }
+
+            newestCol = col + colInc;
 
             IPiece pFirstMJump = CheckPiece(newestRowM, newestCol);
             if (pFirstMJump != null && !pFirstMJump.GetPieceColor().Equals(p.GetPieceColor()))

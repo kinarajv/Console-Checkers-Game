@@ -5,7 +5,7 @@ public interface ICheckers
     /// <summary>
     /// Retrieve rank of the checkers piece
     /// </summary>
-    /// <returns>whether basic or king of the checkers piece</returns>
+    /// <returns>whether basic rank or king rank of the checkers piece</returns>
     Rank GetRank();
 
     /// <summary>
