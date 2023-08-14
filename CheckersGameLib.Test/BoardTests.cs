@@ -8,15 +8,6 @@ public class BoardTests
     public void Setup()
     {
         _board = new Board();
-        _board.SetSize(8);
-    }
-
-    [TestCase(8)]
-    public void GetSizeTest(int expected)
-    {
-        _board.SetSize(expected);
-        int actual = _board.GetSize();
-        Assert.That(expected, Is.EqualTo(actual));
     }
     
     [TestCase(7, false)]

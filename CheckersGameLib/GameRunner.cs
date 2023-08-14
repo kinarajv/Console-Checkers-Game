@@ -11,6 +11,7 @@ public partial class GameRunner
 
     private Dictionary<IPlayer, List<IPiece>> _playerPieces;
     readonly private IBoard _board;
+    private GameStatus _gameStatus;
     private bool _isPlayerTurn;
     readonly List<Piece>? importedPieces;
     readonly Moveset _moveset;
@@ -21,8 +22,7 @@ public partial class GameRunner
         var nlogConfigPath = Path.Combine(currentDirectory, "logs\\nlog.config");
         LogManager.LoadConfiguration(nlogConfigPath);
 
-        logger.Info("Starting robot arm program");
-
+        _gameStatus = GameStatus.NotStarted;
         _isPlayerTurn = false;
         _playerPieces = new Dictionary<IPlayer, List<IPiece>>();
         _moveset = new Moveset();
@@ -46,6 +46,7 @@ public partial class GameRunner
         var nlogConfigPath = Path.Combine(currentDirectory, "logs\\nlog.config");
         LogManager.LoadConfiguration(nlogConfigPath);
 
+        _gameStatus = GameStatus.NotStarted;
         _board = board;
         _isPlayerTurn = false;
         _playerPieces = new Dictionary<IPlayer, List<IPiece>>();
@@ -146,6 +147,7 @@ public partial class GameRunner
                 {
                     if (!piece.GetIsEaten())
                     {
+                        logger.Info("Retrieve a piece success. This piece is on board.");
                         return piece;
                     }
                 }
@@ -173,6 +175,7 @@ public partial class GameRunner
                 }
             }
         }
+        logger.Info("Retrieve player pieces on board success.");
         return playerPieces;
     }
 
@@ -210,28 +213,59 @@ public partial class GameRunner
 
     public GameStatus GetGameStatus()
     {
-        int i = 0;
+        return _gameStatus;
+    }
+
+    public bool SetGameStatus(GameStatus gameStatus)
+    {
+        if (!gameStatus.Equals(_gameStatus))
+        {
+            _gameStatus = gameStatus;
+            logger.Info($"Set Game Status for checkers success. Game Status now is {_gameStatus}");
+            return true;
+        }
+        return false;
+    }
+
+    public IPlayer CheckWinner()
+    {
+        Dictionary<IPlayer, int> playerPiecesLeft = new Dictionary<IPlayer, int>();
         foreach (var kvp in _playerPieces)
         {
-            int pieceLeft = GetPlayerPieces(kvp.Key).Count;
-            if (pieceLeft == 0)
+            if (GetPlayerPieces(kvp.Key).Count == 0)
             {
-                if (i == 0)
+                playerPiecesLeft.Add(kvp.Key, 0);
+                var pieces = kvp.Value.ToList();
+                foreach (var piece in pieces)
                 {
-                    WinnerEventArgs we = new WinnerEventArgs(kvp.Key);
-                    OnWinnerDecided(we);
-                    return GameStatus.RedWin;
-                }
-                else
-                {
-                    WinnerEventArgs we = new WinnerEventArgs(kvp.Key);
-                    OnWinnerDecided(we);
-                    return GameStatus.BlackWin;
+                    if (piece.GetPieceColor().Equals(PieceColor.Red))
+                    {
+                        SetGameStatus(GameStatus.BlackWin);
+                    }
+                    else
+                    {
+                        SetGameStatus(GameStatus.RedWin);
+                    }
                 }
             }
-            i++;
+            else
+            {
+                playerPiecesLeft.Add(kvp.Key, GetPlayerPieces(kvp.Key).Count);
+            }
         }
-        return GameStatus.Ongoing;
+
+        playerPiecesLeft = playerPiecesLeft.OrderBy(c => c.Value).ToDictionary(p => p.Key, c => c.Value);
+
+        if (playerPiecesLeft.Values.First() == 0)
+        {
+            WinnerEventArgs we = new WinnerEventArgs(playerPiecesLeft.Keys.Last());
+            OnWinnerDecided(we);
+            logger.Info($"The winner of the checkers game is {playerPiecesLeft.Keys.Last().GetName()}");
+            return playerPiecesLeft.Keys.Last();
+        }
+        logger.Info($"The game is still Ongoing");
+        SetGameStatus(GameStatus.Ongoing);
+        return null;
     }
 
     public bool PiecePromotion(ICheckersPiece p)
@@ -254,6 +288,7 @@ public partial class GameRunner
         if (p.GetIsKinged())
         {
             p.SetRank(Rank.King);
+            logger.Info("A basic piece has been promoted to a king piece!. Now it can move backward");
             return true;
         }
         return false;
