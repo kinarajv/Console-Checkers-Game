@@ -2,7 +2,11 @@ namespace CheckersGameLib;
 
 public class Moveset
 {
-
+    /// <summary>
+    /// Retrieve list of single move of a checkers game, whether it's for basic piece or king piece
+    /// </summary>
+    /// <param name="piece"></param>
+    /// <returns>List of position that include any single move</returns>
     public List<Position> SingleMove(ICheckersPiece piece)
     {
         int row = piece.GetPosition().GetRow();
@@ -31,6 +35,11 @@ public class Moveset
         return positions;
     }
 
+    /// <summary>
+    /// Retrieve list of single jump move of a checkers game, whether it's for basic piece or king piece
+    /// </summary>
+    /// <param name="piece"></param>
+    /// <returns>List of position that include any single jump move</returns>
     public List<Position> SingleJumpMove(ICheckersPiece piece)
     {
         int row = piece.GetPosition().GetRow();
@@ -59,6 +68,11 @@ public class Moveset
         return positions;
     }
 
+    /// <summary>
+    /// Retrieve list of double jump move of a checkers game, whether it's for basic piece or king piece
+    /// </summary>
+    /// <param name="piece"></param>
+    /// <returns>List of position that include any double jump move</returns>
     public List<Position> DoubleJumpMove(ICheckersPiece piece)
     {
         int row = piece.GetPosition().GetRow();

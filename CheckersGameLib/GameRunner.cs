@@ -135,7 +135,6 @@ public partial class GameRunner
         return false;
     }
 
-    //Check Piece
     /// <summary>
     /// Check neither there is a piece or not based on input row and column
     /// </summary>
@@ -162,7 +161,6 @@ public partial class GameRunner
         return null;
     }
 
-    // Get Player Pieces
     /// <summary>
     /// Retrieve a player's list of pieces
     /// </summary>
@@ -190,7 +188,6 @@ public partial class GameRunner
         return playerPieces;
     }
 
-    // Get player's piece position
     /// <summary>
     /// Retrieve a player's piece based on input position
     /// </summary>
@@ -333,6 +330,10 @@ public partial class GameRunner
         return false;
     }
 
+    /// <summary>
+    /// Invoke event when there's a winner
+    /// </summary>
+    /// <param name="e"></param>
     protected virtual void OnWinnerDecided(WinnerEventArgs e)
     {
         if (WinnerDecided != null)

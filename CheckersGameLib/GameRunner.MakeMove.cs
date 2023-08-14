@@ -3,6 +3,12 @@ namespace CheckersGameLib;
 public partial class GameRunner
 {
     // Make Move    
+    /// <summary>
+    /// Method for player to move a piece, from its origin position to possible and desired destination
+    /// </summary>
+    /// <param name="origin"></param>
+    /// <param name="destination"></param>
+    /// <returns>True if move a piece success, otherwise false</returns>
     public bool MakeMove(Position origin, Position destination)
     {
         int oriRow = origin.GetRow();

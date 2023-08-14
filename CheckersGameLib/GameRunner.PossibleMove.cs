@@ -2,6 +2,11 @@ namespace CheckersGameLib;
 
 public partial class GameRunner
 {
+    /// <summary>
+    /// Retrieve list of possible move of a piece
+    /// </summary>
+    /// <param name="piece"></param>
+    /// <returns>List of position that possible to move of a piece</returns>
     public List<Position> GetPossibleMove(ICheckersPiece piece)
     {
         int initRow = piece.GetPosition().GetRow();
@@ -64,6 +69,14 @@ public partial class GameRunner
         return null;
     }
 
+    /// <summary>
+    /// Check neither a piece path blocked by friendly piece or not
+    /// </summary>
+    /// <param name="initRow"></param>
+    /// <param name="initCol"></param>
+    /// <param name="targetRow"></param>
+    /// <param name="targetCol"></param>
+    /// <returns>True if ptah blocked, otherwise false</returns>
     private bool IsBlocked(int initRow, int initCol, int targetRow, int targetCol)
     {
         int rowDiff = targetRow - initRow;
@@ -225,6 +238,14 @@ public partial class GameRunner
         return false;
     }
 
+    /// <summary>
+    /// Check neither there's an enemy piece before or not
+    /// </summary>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    /// <param name="targetRow"></param>
+    /// <param name="targetCol"></param>
+    /// <returns>True if there's enemy piece before, otherwise false</returns>
     private bool IsEnemyBefore(int row, int col, int targetRow, int targetCol)
     {
         int rowDiff = targetRow - row;
