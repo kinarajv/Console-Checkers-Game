@@ -64,11 +64,21 @@ public partial class GameRunner
         logger.Info("Initial game info created..");
     }
 
+
+    /// <summary>
+    /// Retrieve board boundary
+    /// </summary>
+    /// <returns>integer of board boundary</returns>
     public int GetBoardBoundary()
     {
         return _board.GetSize();
     }
 
+    /// <summary>
+    /// Add an instance of IPlayer to the game
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns>true if add player success, otherwise false</returns>
     public bool AddPlayer(IPlayer player)
     {
         List<IPiece> pieces = new();
