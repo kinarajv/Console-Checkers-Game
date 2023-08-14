@@ -17,8 +17,8 @@ public class Position
     /// </summary>
     public Position()
     {
-        _row = null;
-        _column = null;
+        _row = -1;
+        _column = -1;
     }
 
     /// <summary>
