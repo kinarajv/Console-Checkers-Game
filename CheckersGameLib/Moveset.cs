@@ -1,5 +1,8 @@
 namespace CheckersGameLib;
 
+/// <summary>
+/// Represent any moveset a piece can have
+/// </summary>
 public class Moveset
 {
     /// <summary>

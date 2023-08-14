@@ -1,6 +1,9 @@
 namespace CheckersGameLib;
 using System.Runtime.Serialization;
 
+/// <summary>
+/// Represent row and column of a piece of a game
+/// </summary>
 [DataContract]
 public class Position
 {
@@ -9,12 +12,20 @@ public class Position
     [DataMember]
     private int _column;
 
+    /// <summary>
+    /// Initialize default position that is null
+    /// </summary>
     public Position()
     {
-        // _row = 0;
-        // _column = 0;
+        _row = null;
+        _column = null;
     }
 
+    /// <summary>
+    /// Initialize position based on input row and column
+    /// </summary>
+    /// <param name="row"></param>
+    /// <param name="column"></param>
     public Position(int row, int column)
     {
         _row = row;

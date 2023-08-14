@@ -1,5 +1,8 @@
 namespace CheckersGameLib;
 
+/// <summary>
+/// Represent checkers gameplay
+/// </summary>
 public partial class GameRunner
 {
     /// <summary>

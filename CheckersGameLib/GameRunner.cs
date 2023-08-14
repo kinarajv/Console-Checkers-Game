@@ -3,6 +3,9 @@ using NLog;
 
 namespace CheckersGameLib;
 
+/// <summary>
+/// Represent checkers gameplay
+/// </summary>
 public partial class GameRunner
 {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -16,6 +19,9 @@ public partial class GameRunner
     readonly List<Piece>? importedPieces;
     readonly Moveset _moveset;
 
+    /// <summary>
+    /// Initialize checkers game without initial board size
+    /// </summary>
     public GameRunner()
     {
         var currentDirectory = Directory.GetCurrentDirectory();
@@ -40,6 +46,10 @@ public partial class GameRunner
         logger.Info("Initial game info created");
     }
 
+    /// <summary>
+    /// Initialize checkers game with initial board size
+    /// </summary>
+    /// <param name="board"></param>
     public GameRunner(IBoard board)
     {
         var currentDirectory = Directory.GetCurrentDirectory();
