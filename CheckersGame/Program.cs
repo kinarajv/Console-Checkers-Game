@@ -9,7 +9,7 @@ partial class Program
     {
         var currentDirectory = Directory.GetCurrentDirectory();
         var nlogConfigPath = Path.Combine(currentDirectory, "logs\\nlog.config");
-        LogManager.LoadConfiguration(nlogConfigPath);
+        LogManager.Setup().LoadConfigurationFromFile(nlogConfigPath);
 
         logger.Debug("Logging..");
         logger.Info("Start logging..");
