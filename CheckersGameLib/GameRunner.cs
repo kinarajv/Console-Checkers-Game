@@ -69,7 +69,7 @@ public partial class GameRunner
     /// <summary>
     /// Retrieve board boundary
     /// </summary>
-    /// <returns>integer of board boundary</returns>
+    /// <returns>Integer of board boundary</returns>
     public int GetBoardBoundary()
     {
         return _board.GetSize();
@@ -79,7 +79,7 @@ public partial class GameRunner
     /// Add an instance of IPlayer to the game
     /// </summary>
     /// <param name="player"></param>
-    /// <returns>true if add player success, otherwise false</returns>
+    /// <returns>True if add player success, otherwise false</returns>
     public bool AddPlayer(IPlayer player)
     {
         List<IPiece> pieces = new();
@@ -136,6 +136,12 @@ public partial class GameRunner
     }
 
     //Check Piece
+    /// <summary>
+    /// Check neither there is a piece or not based on input row and column
+    /// </summary>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    /// <returns>A checkers piece, or null if there's no piece</returns>
     public ICheckersPiece CheckPiece(int row, int col)
     {
         foreach (var kvp in _playerPieces)
@@ -157,6 +163,11 @@ public partial class GameRunner
     }
 
     // Get Player Pieces
+    /// <summary>
+    /// Retrieve a player's list of pieces
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns>List of pieces of a player that are still on the board</returns>
     public List<IPiece> GetPlayerPieces(IPlayer player)
     {
         List<IPiece> playerPieces = new();
@@ -180,6 +191,12 @@ public partial class GameRunner
     }
 
     // Get player's piece position
+    /// <summary>
+    /// Retrieve a player's piece based on input position
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="position"></param>
+    /// <returns>A piece of a player, or null if there's no piece</returns>
     public IPiece GetPlayerPiece(IPlayer player, Position position)
     {
         int inputRow = position.GetRow();
@@ -198,6 +215,10 @@ public partial class GameRunner
     }
 
     // Switch Player Turn
+    /// <summary>
+    /// Switch turn after a player makes move
+    /// </summary>
+    /// <returns>True for player 1 turn, False for player 2 turn</returns>
     public bool SwitchTurn()
     {
         if (_isPlayerTurn)
@@ -211,11 +232,20 @@ public partial class GameRunner
         return _isPlayerTurn;
     }
 
+    /// <summary>
+    /// Retrieve status of a game
+    /// </summary>
+    /// <returns>A game status, either not started, ongoing, black win or red win</returns>
     public GameStatus GetGameStatus()
     {
         return _gameStatus;
     }
 
+    /// <summary>
+    /// Set status of a game, either not started, ongoing, black win or red win
+    /// </summary>
+    /// <param name="gameStatus"></param>
+    /// <returns>True if set game status success, otherwise false</returns>
     public bool SetGameStatus(GameStatus gameStatus)
     {
         if (!gameStatus.Equals(_gameStatus))
@@ -227,6 +257,10 @@ public partial class GameRunner
         return false;
     }
 
+    /// <summary>
+    /// Check a winner of the game
+    /// </summary>
+    /// <returns>A player who win a game, or null if there's no winner of the game yet</returns>
     public IPlayer CheckWinner()
     {
         Dictionary<IPlayer, int> playerPiecesLeft = new Dictionary<IPlayer, int>();
@@ -268,6 +302,11 @@ public partial class GameRunner
         return null;
     }
 
+    /// <summary>
+    /// Promote a basic piece to king piece if it has meet requirement
+    /// </summary>
+    /// <param name="p"></param>
+    /// <returns>True if a piece promoted to king, otherwise false</returns>
     public bool PiecePromotion(ICheckersPiece p)
     {
         if (p.GetPieceColor().Equals(PieceColor.Black))

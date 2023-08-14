@@ -3,28 +3,28 @@ namespace CheckersGameLib;
 public interface IPiece
 {
     /// <summary>
-    /// Retrieve position of a checkers piece
+    /// Retrieve position of a piece
     /// </summary>
-    /// <returns>position of a checkers piece that contains its row and column</returns>
+    /// <returns>Position of a piece that contains its row and column</returns>
     Position GetPosition();
 
     /// <summary>
-    /// Set the position of a checkers piece
+    /// Set the position of a piece
     /// </summary>
     /// <param name="position"></param>
-    /// <returns>true if set is success, otherwise false</returns>
+    /// <returns>True if set is success, otherwise false</returns>
     bool SetPosition(Position position);
 
     /// <summary>
-    /// Retrieve color of a checkers piece
+    /// Retrieve color of a piece
     /// </summary>
-    /// <returns>whether black or red color of a piece</returns>
+    /// <returns>Whether black or red color of a piece</returns>
     PieceColor GetPieceColor();
 
     /// <summary>
-    /// Set the color of a checkers piece
+    /// Set the color of a piece
     /// </summary>
     /// <param name="color"></param>
-    /// <returns>true if set is success, otherwise false</returns>
+    /// <returns>True if set is success, otherwise false</returns>
     bool SetPieceColor(PieceColor color);
 }
